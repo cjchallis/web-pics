@@ -16,11 +16,13 @@ class NewVisitorTest(unittest.TestCase):
 
         # He notices the page title and header mention picture review
         self.assertIn('Review Pictures', self.browser.title)
-        self.fail('Finish the test!')
 
         # There is a list of folders to click on
+        self.assertIn('<a href="link1">link1</a>', self.browser.page_source)
+        self.assertIn('<a href="link2">link2</a>', self.browser.page_source)
 
-        # When he clicks a folder, a picture appears
+        # When he clicks a folder, a list of filenames appears
+        self.fail('Finish the test!')
 
         # With the picture, there are options to keep, delete, or pass
 
