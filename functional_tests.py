@@ -14,14 +14,20 @@ class NewVisitorTest(unittest.TestCase):
         # Hank heard about a new site to manage your pictures and goes to check it out
         self.browser.get('http://localhost:8000')
 
-        # He notices the page title and header mention picture review
+        # He notices the page title and mentions picture review
         self.assertIn('Review Pictures', self.browser.title)
 
+        # The page header indicates a list of directories follows
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('Picture Directories', header_text)
+
         # There is a list of folders to click on
-        self.assertIn('<a href="link1">link1</a>', self.browser.page_source)
-        self.assertIn('<a href="link2">link2</a>', self.browser.page_source)
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('dir0', [row.text for row in rows])
 
         # When he clicks a folder, a list of filenames appears
+        self.browser.find_element_by_link_text('dir0').click()
         self.fail('Finish the test!')
 
         # With the picture, there are options to keep, delete, or pass

@@ -1,6 +1,7 @@
 from django.core.urlresolvers import resolve
 from django.test import TestCase
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 from review.views import home_page
 
@@ -13,7 +14,12 @@ class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()
         response = home_page(request)
-        self.assertTrue(response.content.startswith(b'<html>'))
-        self.assertIn(b'<title>Review Pictures</title>', response.content)
-        self.assertTrue(response.content.endswith(b'</html>'))
+        self.assertIn('dir1', response.content.decode())
+        expected_html = render_to_string(
+            'home.html',
+            {'item0': '<a href="dir0">dir0</a>',
+             'item1': '<a href="dir1">dir1</a>',
+            }
+        )
+        self.assertEqual(response.content.decode(), expected_html)
 
