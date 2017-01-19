@@ -28,7 +28,10 @@ class NewVisitorTest(unittest.TestCase):
 
         # When he clicks a folder, a list of filenames appears
         self.browser.find_element_by_link_text('dir0').click()
-        self.fail('Finish the test!')
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('pic0.jpg', [row.text for row in rows])
+
 
         # With the picture, there are options to keep, delete, or pass
 
