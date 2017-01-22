@@ -17,8 +17,8 @@ class HomePageTest(TestCase):
         self.assertIn('dir1', response.content.decode())
         expected_html = render_to_string(
             'home.html',
-            {'item0': '<a href="dir0">dir0</a>',
-             'item1': '<a href="dir1">dir1</a>',
+            {'entries': ['<a href="dir0">dir0</a>',
+                         '<a href="dir1">dir1</a>'],
             }
         )
         self.assertEqual(response.content.decode(), expected_html)
