@@ -18,8 +18,7 @@ from django.conf.urls import include, url
 from review import views
 
 urlpatterns = [
-    url(r'^$', views.home_page, name='home'),
-    url(r'^(.+)/$', views.view_dir, name='view_dir'),
+    url(r'^()$|(.+)/$', views.view_dir, name='view_dir'),
     # url(r'^admin/', include(admin.site.urls)),
 ]
 

@@ -5,15 +5,16 @@ PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "pics")
 def home_page(request):
     dirs = os.listdir(PIC_ROOT)
     dirs.sort()
-    link = '<a href="{0}/">{0}</a>'
+    link = '<a href="{0}">{0}</a>'
     entries = [link.format(d) for d in dirs]
     args = {"entries": entries}
     return render(request, 'home.html', args) 
 
-def view_dir(request, path):
+def view_dir(request, empty, path):
+    if path is None:
+        path = ''
     contents = os.listdir(os.path.join(PIC_ROOT, path))
     print(os.path.join(PIC_ROOT, path))
-    print(contents)
     dirs = [c + '/' for c in contents
             if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
     dirs.sort()

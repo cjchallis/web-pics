@@ -24,10 +24,10 @@ class NewVisitorTest(unittest.TestCase):
         # There is a list of folders to click on
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('dir0', [row.text for row in rows])
+        self.assertIn('dir0/', [row.text for row in rows])
 
         # When he clicks a folder, a list of filenames appears
-        self.browser.find_element_by_link_text('dir0').click()
+        self.browser.find_element_by_link_text('dir0/').click()
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn('pic0.jpg', [row.text for row in rows])
