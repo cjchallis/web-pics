@@ -1,14 +1,8 @@
 from django.shortcuts import render
 import os
-PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "pics") 
+PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
+                        "static") 
 
-def home_page(request):
-    dirs = os.listdir(PIC_ROOT)
-    dirs.sort()
-    link = '<a href="{0}">{0}</a>'
-    entries = [link.format(d) for d in dirs]
-    args = {"entries": entries}
-    return render(request, 'home.html', args) 
 
 def view_dir(request, empty, path):
     if path is None:
@@ -28,3 +22,9 @@ def view_dir(request, empty, path):
     args = {"entries": entries}
     return render(request, 'home.html', args)
    
+
+def view_img(request, path):
+    img = os.path.split(path)[1]
+    return render(request, 'img.html', {'path': path,
+                                        'img':  img})
+
