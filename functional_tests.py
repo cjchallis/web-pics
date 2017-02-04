@@ -1,14 +1,19 @@
+import requests
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import unittest
+
 
 class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.PhantomJS()
         self.browser.implicitly_wait(3)
+        self.imgVerificationErrors = []
 
     def tearDown(self):
         self.browser.quit()
+        self.assertEqual([], self.imgVerificationErrors)
 
     def test_can_load_review_and_delete_pictures(self):
         # Hank heard about a new site to manage your pictures and goes to check it out
@@ -24,16 +29,33 @@ class NewVisitorTest(unittest.TestCase):
         # There is a list of folders to click on
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('dir0/', [row.text for row in rows])
+        self.assertIn('review/', [row.text for row in rows])
 
         # When he clicks a folder, a list of filenames appears
-        self.browser.find_element_by_link_text('dir0/').click()
+        self.browser.find_element_by_link_text('review/').click()
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('pic0.jpg', [row.text for row in rows])
+        self.assertIn('pic0.png', [row.text for row in rows])
 
+        # He clicks on a picture link, and the picture appears 
+        self.browser.find_element_by_link_text('pic0.png').click()
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertEqual('review/pic0.png', header_text)
+        images = self.browser.find_elements(By.TAG_NAME, 'img')
+        self.assertIsNotNone(images)
+        for image in images:
+            current_link = image.get_attribute("src")
+            r = requests.get(current_link)
+            try: self.assertEqual(r.status_code, 200)
+            except AssertionError as e: 
+                self.imgVerificationErrors.append(
+                    current_link + ' response code of ' + r.status_code) 
 
-        # With the picture, there are options to keep, delete, or pass
+        # With the picture, there are options to keep, delete, previous, next
+        link = self.browser.find_element_by_link_text('keep')
+        link = self.browser.find_element_by_link_text('delete')
+        link = self.browser.find_element_by_link_text('previous')
+        link = self.browser.find_element_by_link_text('next')
 
         # He passes on the picture, a new picture appears
 
