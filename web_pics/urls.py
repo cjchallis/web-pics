@@ -19,6 +19,8 @@ from review import views
 
 urlpatterns = [
     url(r'^()$|(.+)/$', views.view_dir, name='view_dir'),
+    url(r'(.+)/next$', views.nxt, name = 'next'),
+    url(r'(.+)/previous$', views.prev, name = 'prev'), 
     url(r'(.+)', views.view_img, name='view_img'),
     # url(r'^admin/', include(admin.site.urls)),
 ]
