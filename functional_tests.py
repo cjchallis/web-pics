@@ -1,3 +1,5 @@
+from review.models import PicFile
+
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -68,8 +70,20 @@ class NewVisitorTest(unittest.TestCase):
         self.find_img('pic1.png')
 
         # He deletes the next picture, a new picture appears
+        nxt = self.browser.find_element_by_link_text('next')
+        delete = self.browser.find_element_by_link_text('delete')
+        delete.click()
+        pic = PicFile.objects.filter(path = 'review/pic1.png')
+        assertEqual(pic.status, 'to_delete')
+        nxt.click()
 
         # He keeps the last picture
+        nxt = self.browser.find_element_by_link_text('next')
+        keep = self.browser.find_element_by_link_text('keep')
+        keep.click()
+        pic = PicFile.objects.filter(path = 'review/pic2.png')
+        assertEqual(pic.status, 'keep')
+        nxt.click()
 
         # The first picture reappears - he keeps this one as well
 
