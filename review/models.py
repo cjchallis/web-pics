@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class PicFile(models.Model):
+    path = models.TextField(default='')
+    status = models.TextField(default='')
+
