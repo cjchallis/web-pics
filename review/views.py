@@ -1,3 +1,5 @@
+from review.models import PicFile
+
 from django.shortcuts import render, redirect
 import os
 PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
@@ -53,4 +55,19 @@ def prev(request, nodepath):
     current = pics.index(node)
     nxt = pics[(current - 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
+
+
+def modify(request, nodepath, mod):
+    dummy = PicFile()
+    dummy.path = "/"
+    dummy.save()
+    querySet = PicFile.objects.filter(path=nodepath)
+    if not querySet:
+        pic = PicFile()
+        pic.path = nodepath
+    else:
+        pic = querySet[0]
+    pic.status = mod
+    pic.save()
+    return redirect("/" + nodepath)
 
