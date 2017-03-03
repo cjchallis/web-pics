@@ -1,12 +1,11 @@
-from review.models import PicFile
-
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import unittest
+import requests
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.PhantomJS()
@@ -35,7 +34,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_load_review_and_delete_pictures(self):
         # Hank heard about a new site to manage your pictures and goes to check it out
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # He notices the page title and mentions picture review
         self.assertIn('Review Pictures', self.browser.title)
