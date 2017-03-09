@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <title>Review Pictures</title>
+    </head>
+    <body>
+        <h1>Picture Directories</h1>
+        <table id="id_list_table">
+            {% for entry in entries %}
+                <tr><td>{{ entry |safe }}</td></tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
+
