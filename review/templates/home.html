@@ -1,14 +1,12 @@
 <html>
     <head>
-        <title>Review Pictures</title>
+        <title>Picture Management</title>
     </head>
     <body>
-        <h1>Picture Directories</h1>
-        <table id="id_list_table">
-            {% for entry in entries %}
-                <tr><td>{{ entry |safe }}</td></tr>
-            {% endfor %}
-        </table>
+        <h1>Picture Management</h1>
+        <a href="review/">Review Pictures</a>
+        <br>
+        <a href="/deletion_list">Delete Selected Pictures</a>
     </body>
 </html>
 
