@@ -2,10 +2,13 @@ from django.core.urlresolvers import resolve
 from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+import os
 
 from review.models import PicFile
 from review.views import view_dir 
 
+STATIC_PATH = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
+                           "static")
 
 class PageTest(TestCase):
 
@@ -32,25 +35,43 @@ class PageTest(TestCase):
 class DeletionTest(TestCase):
 
     def test_delete_list(self):
+
+        path0 = 'review/pic0.png'
+        path1 = 'review/pic5.png'
+        path2 = 'review/pic6.png'
+        full_path0 = os.path.join(STATIC_PATH, path0)
+        full_path1 = os.path.join(STATIC_PATH, path1)
+        full_path2 = os.path.join(STATIC_PATH, path2)
+        if not os.path.exists(full_path1):
+            os.mknod(full_path1)
+        if not os.path.exists(full_path2):
+            os.mknod(full_path2)
+
         first_file = PicFile()
-        first_file.path = 'review/pic0.png'
-        first_file.status = "delete"
+        first_file.path = path0 
+        first_file.status = "keep"
         first_file.save()
 
         sec_file = PicFile()
-        sec_file.path = 'review/pic1.png'
+        sec_file.path = path1 
         sec_file.status = "delete"
         sec_file.save()
 
         thr_file = PicFile()
-        thr_file.path = 'review/pic2.png'
-        thr_file.path = 'Saved'
+        thr_file.path = path2 
+        thr_file.status = 'delete' 
         thr_file.save()
 
         response = self.client.get('/deletion_list')
-        self.assertContains(response, 'review/pic0.png')
-        self.assertContains(response, 'review/pic1.png')
-        self.assertNotContains(response, 'review/pic2.png')
+        print(response.content)
+        self.assertNotContains(response, path0)
+        self.assertContains(response, path1)
+        self.assertContains(response, path2)
+
+        response = self.client.get('/run_deletion')
+        self.assertTrue(os.path.exists(full_path0))
+        self.assertFalse(os.path.exists(full_path1))
+        self.assertFalse(os.path.exists(full_path2))
 
 
 class StatusModelTest(TestCase):
