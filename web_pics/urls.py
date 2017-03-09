@@ -18,10 +18,13 @@ from django.conf.urls import include, url
 from review import views
 
 urlpatterns = [
-    url(r'^()$|(.+)/$', views.view_dir, name='view_dir'),
+    url(r'^$', views.home, name = 'home'),
+    url(r'^deletion_list$', views.del_list, name = 'del_list'),
+    url(r'^/run_deletion$', views.run_del, name = 'run_del'),
+    url(r'(.+)/$', views.view_dir, name='view_dir'),
     url(r'(.+)/next$', views.nxt, name = 'next'),
     url(r'(.+)/previous$', views.prev, name = 'prev'), 
-    url(r'(.+)/(keep|delete)$', views.modify, name = 'modify'),
+    url(r'(.+)/(keep|delete|chatbook)$', views.modify, name = 'modify'),
     url(r'(.+)', views.view_img, name='view_img'),
     # url(r'^admin/', include(admin.site.urls)),
 ]
