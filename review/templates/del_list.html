@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Deletion List</title>
+    </head>
+    <body>
+        <h1>Files Staged for Deletion</h1>
+        <table id="id_list_table">
+            {% for entry in entries %}
+                <tr><td>{{ entry |safe }}</td></tr>
+            {% endfor %}
+        </table>
+        <h2><a href="/run_deletion">Delete Files</a></h2>
+    </body>
+</html>
+
