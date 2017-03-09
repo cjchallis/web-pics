@@ -7,10 +7,26 @@ PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
                         "static") 
 STATUS = {"keep": "Saved",
           "delete": "To Delete",
-          "Unreviewed": "Unreviewed"
+          "Unreviewed": "Unreviewed",
+          "chatbook": "In Chatbooks"
          }
 
-def view_dir(request, empty, path):
+def home(request):
+    return render(request, 'home.html')
+
+
+def run_del(request):
+    return redirect(request, '/deletion_list')
+
+
+def del_list(request):
+    to_del = PicFile.objects.filter(status="delete")
+    entries = [f.path for f in to_del]
+    args = {"entries": entries}
+    return render(request, 'del_list.html', args)
+
+
+def view_dir(request, path):
     if path is None:
         path = ''
     contents = os.listdir(os.path.join(PIC_ROOT, path))
@@ -24,7 +40,7 @@ def view_dir(request, empty, path):
     dirs_pics = dirs + pics
     entries = [link.format(e, e) for e in dirs_pics]
     args = {"entries": entries}
-    return render(request, 'home.html', args)
+    return render(request, 'dir.html', args)
    
 
 def view_img(request, nodepath):
