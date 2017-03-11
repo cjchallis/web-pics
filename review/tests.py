@@ -63,7 +63,6 @@ class DeletionTest(TestCase):
         thr_file.save()
 
         response = self.client.get('/deletion_list')
-        print(response.content)
         self.assertNotContains(response, path0)
         self.assertContains(response, path1)
         self.assertContains(response, path2)
