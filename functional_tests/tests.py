@@ -37,21 +37,23 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
 
         # He notices the page title and mentions picture review
-        self.assertIn('Review Pictures', self.browser.title)
+        self.assertIn('Picture Management', self.browser.title)
 
         # The page header indicates a list of directories follows
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('Picture Directories', header_text)
+        self.assertIn('Picture Management', header_text)
 
-        # There is a list of folders to click on
+        # There are options to review pictures and delete pictures
+        review = self.browser.find_element_by_link_text('Review Pictures')
+        delete = self.browser.find_element_by_link_text('Delete Selected Pictures')
+        # He clicks on Review Pictures
+        review.click()
+
+        # There is a list of folders and files to click on
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('review/', [row.text for row in rows])
-
-        # When he clicks a folder, a list of filenames appears
-        self.browser.find_element_by_link_text('review/').click()
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('/..', [row.text for row in rows])
+        self.assertIn('dir0/', [row.text for row in rows])
         self.assertIn('pic0.png', [row.text for row in rows])
 
         # He clicks on a picture link, and the picture appears 
