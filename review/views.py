@@ -19,6 +19,7 @@ def run_del(request):
     to_del = PicFile.objects.filter(status="delete")
     for f in to_del:
         os.remove(os.path.join(PIC_ROOT, f.path))
+        f.delete()
     return redirect('/deletion_list')
 
 
@@ -40,8 +41,10 @@ def view_dir(request, path):
             if os.path.isfile(os.path.join(PIC_ROOT, path, c))]
     pics.sort()
     link = '<a href="{0}">{1}</a>'
+    up = os.path.split(path)[0]
+    entries = ['<a href="/{0}/">/..</a>'.format(up)]
     dirs_pics = dirs + pics
-    entries = [link.format(e, e) for e in dirs_pics]
+    entries.extend([link.format(e, e) for e in dirs_pics])
     args = {"entries": entries}
     return render(request, 'dir.html', args)
    
