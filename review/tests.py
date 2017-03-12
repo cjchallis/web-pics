@@ -72,6 +72,8 @@ class DeletionTest(TestCase):
         self.assertFalse(os.path.exists(full_path1))
         self.assertFalse(os.path.exists(full_path2))
 
+        to_del = PicFile.objects.filter(status='delete')
+        self.assertEqual(len(to_del), 0)
 
 class StatusModelTest(TestCase):
 
