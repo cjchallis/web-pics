@@ -46,7 +46,11 @@ def view_dir(request, path):
     pics.sort()
     link = '<a href="{0}">{1}</a>'
     up = os.path.split(path)[0]
-    entries = ['<a href="/{0}/">/..</a>'.format(up)]
+    print(up)
+    if up == "":
+        entries = ['<a href="/">/..</a>']
+    else:
+        entries = ['<a href="/{0}/">/..</a>'.format(up)]
     dirs_pics = dirs + pics
     entries.extend([link.format(e, e) for e in dirs_pics])
     args = {"entries": entries}
@@ -61,9 +65,10 @@ def view_img(request, nodepath):
         pf.status = 'Unreviewed'
         pf.save()
     status = pf.status
-    img = os.path.split(nodepath)[1]
+    folder, img = os.path.split(nodepath)
     return render(request, 'img.html', {'path': nodepath,
                                         'img': img,
+                                        'folder': folder,
                                         'status': STATUS[status]
                                        })
 
