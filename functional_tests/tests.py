@@ -58,7 +58,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def test_can_load_review_and_delete_pictures(self):
  
-        # Hank heard about a new site to manage your pictures and goes to check it out
+        # Hank heard about a new site to manage pictures and goes to check it out
         self.browser.get(self.live_server_url)
 
         # He notices the page title and mentions picture review
@@ -99,7 +99,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         nxt.click()
         self.find_img('review/testing/pic1.png')
 
-        # He deletes the next picture, its status changes to 'To Delete'
+        # He deletes this picture, its status changes to 'To Delete'
         delete = self.browser.find_element_by_link_text('delete')
         delete.click()
         status = self.browser.find_element_by_tag_name('h2').text
@@ -107,7 +107,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         nxt = self.browser.find_element_by_link_text('next')
         nxt.click()
 
-        # He keeps the last picture
+        # He keeps the third picture
+        self.find_img('review/testing/pic5.png')
         keep = self.browser.find_element_by_link_text('keep')
         keep.click()
         status = self.browser.find_element_by_tag_name('h2').text
@@ -115,7 +116,31 @@ class NewVisitorTest(StaticLiveServerTestCase):
         nxt = self.browser.find_element_by_link_text('next')
         nxt.click()
 
-        # The first picture reappears - he keeps this one as well
+        # He marks the last picture for Chatbooks
+        self.find_img('review/testing/pic6.png')
+        chat = self.browser.find_element_by_link_text('Add to Chatbooks')
+        chat.click()
+        status = self.browser.find_element_by_tag_name('h2').text
+        self.assertEqual(status, 'In Chatbooks')
+
+        # He goes back to the 'testing' folder
+        back = self.browser.find_element_by_link_text('Back to Folder').click()
+
+        # He goes back to the home page by going up two directories
+        up = self.browser.find_element_by_link_text('/..').click()
+        up = self.browser.find_element_by_link_text('/..').click()
+
+        # He clicks 'Delete Selected Pictures', then Delete Files
+        self.browser.find_element_by_link_text(
+            'Delete Selected Pictures').click()
+        self.browser.find_element_by_link_text('Delete Files').click()
+
+        # The deletion list is now empty
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertEqual(len(rows), 0)
+
+
 
         # A message appears that all pictures in this folder have been reviewed, and
         # he is taken to the home page
