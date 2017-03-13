@@ -18,16 +18,24 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.implicitly_wait(3)
         self.imgVerificationErrors = []
         # populate /testing from /staging
-        testing = os.path.join(STATIC_ROOT, "review", "testing")
-        staging = os.path.join(testing, "staging")
-        for item in os.lisdtir(staging):
-            if os.path.isdir(item):
-                shutil.copytree(item, os.path.join(testing, item))
+        self.testing = os.path.join(STATIC_ROOT, "review", "testing")
+        self.staging = os.path.join(self.testing, "staging")
+        for item in os.listdir(self.staging):
+            full_path = os.path.join(self.staging, item)
+            if os.path.isdir(full_path):
+                shutil.copytree(full_path, os.path.join(self.testing, item))
             else:
-                shutil.copy(item, testing)
+                shutil.copy(full_path, self.testing)
 
 
     def tearDown(self):
+        for item in os.listdir(self.testing):
+            full_path = os.path.join(self.testing, item)
+            if os.path.isdir(full_path):
+                shutil.rmtree(full_path)
+            else:
+                os.remove(full_path)
+            
         self.browser.quit()
         self.assertEqual([], self.imgVerificationErrors)
 
