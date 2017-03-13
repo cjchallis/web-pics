@@ -7,8 +7,11 @@ import os
 from review.models import PicFile
 from review.views import view_dir 
 
-STATIC_PATH = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
-                           "static")
+cur_path = os.path.realpath(__file__)
+review = os.path.split(cur_path)[0]
+web_pics = os.path.split(review)[0]
+STATIC_PATH = os.path.join(web_pics, "review", "static")
+
 
 class PageTest(TestCase):
 

@@ -3,8 +3,12 @@ from review.models import PicFile
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 import os
-PIC_ROOT = os.path.join("/", "home", "pi", "tdd", "web_pics", "review",
-                        "static") 
+
+cur_path = os.path.realpath(__file__)
+review = os.path.split(cur_path)[0]
+web_pics = os.path.split(review)[0]
+PIC_ROOT = os.path.join(web_pics, "review", "static")
+
 STATUS = {"keep": "Saved",
           "delete": "To Delete",
           "Unreviewed": "Unreviewed",
