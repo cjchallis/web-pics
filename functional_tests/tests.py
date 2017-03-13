@@ -140,7 +140,14 @@ class NewVisitorTest(StaticLiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertEqual(len(rows), 0)
 
+        # He navigates back to the 'testing' folder
+        self.browser.find_element_by_link_text('Back to Home Page').click()
+        self.browser.find_element_by_link_text('Review Pictures').click()
+        self.browser.find_element_by_link_text('testing/').click()
 
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertNotIn('pic1.png', [row.text for row in rows[)
 
         # A message appears that all pictures in this folder have been reviewed, and
         # he is taken to the home page
