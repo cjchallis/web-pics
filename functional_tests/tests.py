@@ -3,7 +3,13 @@ from selenium.webdriver.common.by import By
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import unittest
 import requests
+import shutil
+import os
 
+cur_path = os.path.realpath(__file__)
+func = os.path.split(cur_path)[0]
+web_pics = os.path.split(func)[0]
+STATIC_ROOT = os.path.join(web_pics, "review", "static")
 
 class NewVisitorTest(StaticLiveServerTestCase):
 
@@ -11,6 +17,15 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser = webdriver.PhantomJS()
         self.browser.implicitly_wait(3)
         self.imgVerificationErrors = []
+        # populate /testing from /staging
+        testing = os.path.join(STATIC_ROOT, "review", "testing")
+        staging = os.path.join(testing, "staging")
+        for item in os.lisdtir(staging):
+            if os.path.isdir(item):
+                shutil.copytree(item, os.path.join(testing, item))
+            else:
+                shutil.copy(item, testing)
+
 
     def tearDown(self):
         self.browser.quit()
@@ -33,6 +48,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
 
     def test_can_load_review_and_delete_pictures(self):
+ 
         # Hank heard about a new site to manage your pictures and goes to check it out
         self.browser.get(self.live_server_url)
 
@@ -46,8 +62,12 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # There are options to review pictures and delete pictures
         review = self.browser.find_element_by_link_text('Review Pictures')
         delete = self.browser.find_element_by_link_text('Delete Selected Pictures')
+
         # He clicks on Review Pictures
         review.click()
+
+        # He clicks on the 'testing' folder
+        self.browser.find_element_by_link_text('testing/').click()
 
         # There is a list of folders and files to click on
         table = self.browser.find_element_by_id('id_list_table')
