@@ -30,11 +30,12 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         for item in os.listdir(self.testing):
-            full_path = os.path.join(self.testing, item)
-            if os.path.isdir(full_path):
-                shutil.rmtree(full_path)
-            else:
-                os.remove(full_path)
+            if item != 'staging':
+                full_path = os.path.join(self.testing, item)
+                if os.path.isdir(full_path):
+                    shutil.rmtree(full_path)
+                else:
+                    os.remove(full_path)
             
         self.browser.quit()
         self.assertEqual([], self.imgVerificationErrors)
