@@ -86,7 +86,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # He clicks on a picture link, and the picture appears 
         self.browser.find_element_by_link_text('pic0.png').click()
-        self.find_img('review/pic0.png')
+        self.find_img('review/testing/pic0.png')
 
         # With the picture, there are options to keep, delete, previous, next
         keep = self.browser.find_element_by_link_text('keep')
@@ -96,7 +96,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # He clicks on next, a new picture appears
         nxt.click()
-        self.find_img('review/pic1.png')
+        self.find_img('review/testing/pic1.png')
 
         # He deletes the next picture, its status changes to 'To Delete'
         delete = self.browser.find_element_by_link_text('delete')

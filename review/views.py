@@ -46,7 +46,6 @@ def view_dir(request, path):
     pics.sort()
     link = '<a href="{0}">{1}</a>'
     up = os.path.split(path)[0]
-    print(up)
     if up == "":
         entries = ['<a href="/">/..</a>']
     else:
