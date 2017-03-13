@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 import os
+import shutil
 
 from review.models import PicFile
 from review.views import view_dir 
@@ -39,9 +40,16 @@ class DeletionTest(TestCase):
 
     def test_delete_list(self):
 
-        path0 = 'review/pic0.png'
-        path1 = 'review/pic5.png'
-        path2 = 'review/pic6.png'
+        testing = os.path.join(STATIC_PATH, 'review', 'testing')
+        staging = os.path.join(testing, 'staging')
+        shutil.copy(os.path.join(staging, 'pic0.png'), testing)
+        shutil.copy(os.path.join(staging, 'pic5.png'), testing)
+        shutil.copy(os.path.join(staging, 'pic6.png'), testing)
+        shutil.copytree(os.path.join(staging, 'dir0'),
+                        os.path.join(testing, 'dir0'))
+        path0 = 'review/testing/pic0.png'
+        path1 = 'review/testing/pic5.png'
+        path2 = 'review/testing/pic6.png'
         full_path0 = os.path.join(STATIC_PATH, path0)
         full_path1 = os.path.join(STATIC_PATH, path1)
         full_path2 = os.path.join(STATIC_PATH, path2)
@@ -77,6 +85,14 @@ class DeletionTest(TestCase):
 
         to_del = PicFile.objects.filter(status='delete')
         self.assertEqual(len(to_del), 0)
+        
+        for item in os.listdir(testing):
+            if item != 'staging':
+                full_path = os.path.join(testing, item)
+                if os.path.isdir(full_path):
+                   shutil.rmtree(full_path) 
+                else:
+                    os.remove(full_path)
 
 class StatusModelTest(TestCase):
 
