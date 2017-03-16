@@ -1,8 +1,10 @@
-<html>
-    <head>
-        <title>Deletion List</title>
-    </head>
-    <body>
+{% extends 'base.html' %}
+
+{% block del-list-active %}
+class="active"
+{% endblock %}
+
+{% block home %}
         <h1>Files Staged for Deletion</h1>
         <table id="id_list_table">
             {% for entry in entries %}
@@ -11,7 +13,5 @@
         </table>
         <h2><a href="/run_deletion">Delete Files</a></h2>
         <br>
-        <a href="/">Back to Home Page</a>
-    </body>
-</html>
+{% endblock %}
 
