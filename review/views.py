@@ -50,9 +50,11 @@ def view_dir(request, path):
         entries = ['<a href="/">/..</a>']
     else:
         entries = ['<a href="/{0}/">/..</a>'.format(up)]
-    dirs_pics = dirs + pics
+    # dirs_pics = dirs + pics
+    dirs_pics = dirs
     entries.extend([link.format(e, e) for e in dirs_pics])
-    args = {"entries": entries}
+    pic_paths = [os.path.join(path, p) for p in pics]
+    args = {"entries": entries, "pics": pics, "path": path}
     return render(request, 'dir.html', args)
    
 

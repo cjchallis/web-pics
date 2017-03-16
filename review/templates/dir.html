@@ -27,7 +27,30 @@
             </table>
         </div>
     </div>
+    <div class="row match-my-cols">
+        {% for pic in pics %}
+        <div class="col-sm-6 col-md-4 col-lg-2">
+            <a href="{{ pic }}" class="thumbnail">
+                <img src="/static/{{ path }}/{{ pic }}" alt="{{ pic }}">
+            </a>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 </body>
+
+<style>
+.row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+</style>
 </html>
 
