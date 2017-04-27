@@ -8,8 +8,8 @@ class PicFile(models.Model):
     STATUS_CHOICES = (
         (UNREVIEWED, 'Unreviewed'),
         (KEEP, 'Keep'),
-        (CHATBOOKS, 'Junior'),
-        (SENIOR, 'Senior'),
+        (CHATBOOKS, 'Chatbooks'),
+        (DELETE, 'Delete'),
     )
     path = models.TextField(default='')
     status = models.CharField(
