@@ -1,4 +1,5 @@
 from review.models import PicFile
+from review.forms import PicForm
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -14,6 +15,12 @@ STATUS = {"keep": "Saved",
           "Unreviewed": "Unreviewed",
           "chatbook": "In Chatbooks"
          }
+
+def test_forms(request):
+    form = PicForm()
+    args = {"form": form}
+    return render(request, 'test_forms.html', args)
+
 
 def home(request):
     return render(request, 'home.html')
