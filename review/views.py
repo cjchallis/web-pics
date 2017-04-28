@@ -10,16 +10,20 @@ review = os.path.split(cur_path)[0]
 web_pics = os.path.split(review)[0]
 PIC_ROOT = os.path.join(web_pics, "review", "static")
 
-STATUS = {"keep": "Saved",
-          "delete": "To Delete",
-          "Unreviewed": "Unreviewed",
-          "chatbook": "In Chatbooks"
+STATUS = {PicFile.KEEP: "Saved",
+          PicFile.DELETE: "To Delete",
+          PicFile.UNREVIEWED: "Unreviewed",
+          PicFile.CHATBOOKS: "In Chatbooks"
          }
 
 def test_forms(request):
-    form = PicForm()
-    args = {"form": form}
-    return render(request, 'test_forms.html', args)
+    path = os.path.join("review", "testing", "staging", "pic0.png")
+    if request.method == 'POST':
+        form = PicForm(request.POST, instance=PicFile.objects.get(path=path))
+        form.save()
+    else:
+        form = PicForm(instance=PicFile.objects.get(path=path))
+    return render(request, 'test_forms.html', {"form": form})
 
 
 def home(request):

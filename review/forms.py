@@ -5,5 +5,6 @@ class PicForm(forms.ModelForm):
 
     class Meta:
         model = PicFile
-        fields = ('status',)
+        fields = ('path', 'status',)
+        widgets = {'path': forms.HiddenInput()}
 
