@@ -74,7 +74,7 @@ def view_img(request, nodepath):
         pf = PicFile.objects.get(path = nodepath)
     except ObjectDoesNotExist:
         pf = PicFile()
-        pf.status = 'Unreviewed'
+        pf.status = 'UN'
         pf.save()
     status = pf.status
     folder, img = os.path.split(nodepath)
