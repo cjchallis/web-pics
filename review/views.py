@@ -1,6 +1,7 @@
 from review.models import PicFile
 from review.forms import PicForm
 
+from django.forms import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 import os
@@ -18,12 +19,30 @@ STATUS = {PicFile.KEEP: "Saved",
 
 def test_forms(request):
     path = os.path.join("review", "testing", "staging", "pic0.png")
+    relpath = os.path.join("review", "testing", "staging")
+    abspath = os.path.join(PIC_ROOT, "review", "testing", "staging")
+    pics = [p for p in os.listdir(abspath)
+            if os.path.isfile(os.path.join(abspath, p))]
+    PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
-        form = PicForm(request.POST, instance=PicFile.objects.get(path=path))
-        form.save()
+        formset = PicFormSet(request.POST, request.FILES)
+        for form in formset:
+            if form.is_valid():
+                print(form)
+                form.save()
+        #form = PicForm(request.POST, instance=PicFile.objects.get(path=path))
+        #form.save()
     else:
-        form = PicForm(instance=PicFile.objects.get(path=path))
-    return render(request, 'test_forms.html', {"form": form})
+        formset = PicFormSet(
+            queryset=PicFile.objects.filter(path__startswith=relpath))
+        #form = PicForm(instance=PicFile.objects.get(path=path))
+    print("Formset length:" + str(len(formset)))
+ #   formset[10].DELETE = True
+    return render(request, 'test_forms.html', 
+                  {
+                 #     "form": form,
+                      "formset": formset
+                  })
 
 
 def home(request):

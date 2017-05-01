@@ -6,5 +6,12 @@
         {{form}}
         <input type="submit" value = "Submit"/>
     </form>
+    <form action="/test_forms" method="post">
+        {% csrf_token %}
+        <table>
+            {{ formset }}
+        </table>
+        <input type="submit" value = "Submit Set" />
+    </form>
 {% endblock %}
 
