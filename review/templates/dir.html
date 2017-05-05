@@ -1,20 +1,15 @@
 {% extends 'base.html' %}
 
 {% block pics-active %}
-class="active"
+    class="active"
 {% endblock %}
 
 {% block home %}
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="text-center">
-                <h1>Review Pictures</h1>
-            </div>
-        </div>
+    <div class="text-center">
+        <h1>Review Pictures</h1>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-sm-6 col-sm-offset-3 col-xs-12">
             <table id="id_list_table" class="table">
                 {% for entry in entries %}
                     <tr><td>{{ entry |safe }}</td></tr>
@@ -45,7 +40,6 @@ class="active"
         </div>
         {% endfor %}
     </div>
-</div>
 {% endblock %}
 
 {% block style %}

@@ -1,16 +1,11 @@
 {% extends 'base.html' %}
 {% block home %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="text-center">
-                <h1>{{ path }}</h1>
-                <h2>{{ status }}</h2>
-            </div>
-        </div>
+    <div class="text-center">
+    <h1>{{ path }}</h1>
+        <h2>{{ status }}</h2>
     </div>
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-12">
             <img src="/static/{{ path }}" class="img-thumbnail" alt="image">
         </div>
     </div>
@@ -34,6 +29,5 @@
             <a href="/{{ folder }}/">Back to Folder</a>
         </div>
     </div>
-</div>
 {% endblock %}
 
