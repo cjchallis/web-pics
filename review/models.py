@@ -6,10 +6,10 @@ class PicFile(models.Model):
     CHATBOOKS = 'CH'
     DELETE = 'DL'
     STATUS_CHOICES = (
-        (UNREVIEWED, 'Unreviewed'),
-        (KEEP, 'Keep'),
-        (CHATBOOKS, 'Chatbooks'),
-        (DELETE, 'Delete'),
+        (UNREVIEWED, 'trash'),
+        (KEEP, 'floppy-disk'),
+        (CHATBOOKS, 'heart'),
+        (DELETE, 'trash'),
     )
     path = models.TextField(default='')
     status = models.CharField(

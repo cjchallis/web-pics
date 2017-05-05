@@ -3,14 +3,30 @@
 {% block home %}
     <form action="/test_forms" method="post">
         {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-            <img src="/static/review/testing/staging/pic0.png"
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <img src="/static/{{ form.path.value|default_if_none:'' }}"
                 class="img-thumbnail"
                 alt="image">
-                {{ form }}
-                {{ form.path.value|default_if_none:"" }}
+            <div class="btn-group btn-group-justified" data-toggle="buttons">
+            {% for value, text in form.status.field.choices %}
+                <label for="id_form-{{ forloop.parentloop.counter0 }}-status_{{ forloop.counter0 }}"
+                    class="btn btn-primary"
+                >
+                <input type="radio"
+                    id="id_form-{{ forloop.parentloop.counter0 }}-status_{{ forloop.counter0 }}"
+                    name="form-{{ forloop.parentloop.counter0 }}-status"
+                    autocomplete="off"
+                    value="{{ value }}"
+                >
+                <span class="glyphicon glyphicon-{{ text }}"></span>
+                </label>
             {% endfor %}
+            </div>
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+        {% endfor %}
         <input type="submit" value = "Submit Set" />
     </form>
 {% endblock %}

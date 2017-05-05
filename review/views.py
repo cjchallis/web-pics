@@ -36,7 +36,6 @@ def test_forms(request):
         formset = PicFormSet(
             queryset=PicFile.objects.filter(path__startswith=relpath))
         #form = PicForm(instance=PicFile.objects.get(path=path))
-    print("Formset length:" + str(len(formset)))
  #   formset[10].DELETE = True
     return render(request, 'test_forms.html', 
                   {
