@@ -19,12 +19,12 @@ STATUS = {PicFile.KEEP: "Saved",
 
 def get_picfile(path, name):
     try:
-        pf = PicFile.objects.get(path=path, name=node)
+        pf = PicFile.objects.get(path=path, name=name)
     except ObjectDoesNotExist:
         pf = PicFile()
         pf.status = 'UN'
         pf.path = path
-        pf.name = node
+        pf.name = name
         pf.save()
     return pf
 

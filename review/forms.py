@@ -5,7 +5,8 @@ class PicForm(forms.ModelForm):
 
     class Meta:
         model = PicFile
-        fields = ('path', 'status',)
+        fields = ('path', 'name', 'status',)
         widgets = {'path': forms.HiddenInput(),
+                   'name': forms.HiddenInput(),
                    'status': forms.RadioSelect()}
 
