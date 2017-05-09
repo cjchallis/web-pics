@@ -60,6 +60,7 @@ def test_forms(request, path):
             queryset=PicFile.objects.filter(path=relpath))
     return render(request, 'test_forms.html', 
                   {
+                      "path": path,
                       "entries": entries,
                       "formset": formset
                   })

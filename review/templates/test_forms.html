@@ -10,7 +10,7 @@
             </table>
         </div>
     </div>
-    <form action="/test_forms" method="post">
+    <form action="/{{ path }}/" method="post">
         {% csrf_token %}
         {{ formset.management_form }}
         <div class="row">
