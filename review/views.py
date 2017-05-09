@@ -17,12 +17,38 @@ STATUS = {PicFile.KEEP: "Saved",
           PicFile.CHATBOOKS: "In Chatbooks"
          }
 
-def test_forms(request):
-    path = os.path.join("review", "testing", "staging", "pic0.png")
-    relpath = os.path.join("review", "testing", "staging")
-    abspath = os.path.join(PIC_ROOT, "review", "testing", "staging")
+def get_picfile(path, name):
+    try:
+        pf = PicFile.objects.get(path=path, name=node)
+    except ObjectDoesNotExist:
+        pf = PicFile()
+        pf.status = 'UN'
+        pf.path = path
+        pf.name = node
+        pf.save()
+    return pf
+
+
+def test_forms(request, path):
+    if path is None:
+        path = ''
+    contents = os.listdir(os.path.join(PIC_ROOT, path))
+    dirs = [c + '/' for c in contents
+            if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
+    dirs.sort()
+    link = '<a href="{0}">{1}</a>'
+    up = os.path.split(path)[0]
+    if up == "":
+        entries = ['<a href="/">/..</a>']
+    else:
+        entries = ['<a href="/{0}/">/..</a>'.format(up)]
+    entries.extend([link.format(d, d) for d in dirs])
+    relpath = path 
+    abspath = os.path.join(PIC_ROOT, relpath)
     pics = [p for p in os.listdir(abspath)
             if os.path.isfile(os.path.join(abspath, p))]
+    for p in pics:
+        get_picfile(path, p)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
@@ -31,9 +57,10 @@ def test_forms(request):
                 form.save()
     else:
         formset = PicFormSet(
-            queryset=PicFile.objects.filter(path__startswith=relpath))
+            queryset=PicFile.objects.filter(path=relpath))
     return render(request, 'test_forms.html', 
                   {
+                      "entries": entries,
                       "formset": formset
                   })
 
@@ -43,7 +70,7 @@ def home(request):
 
 
 def run_del(request):
-    to_del = PicFile.objects.filter(status="delete")
+    to_del = PicFile.objects.filter(status="DL")
     for f in to_del:
         os.remove(os.path.join(PIC_ROOT, f.path))
         f.delete()
@@ -82,17 +109,19 @@ def view_dir(request, path):
    
 
 def view_img(request, nodepath):
+    path, node = os.path.split(nodepath)
     try:
-        pf = PicFile.objects.get(path = nodepath)
+        pf = PicFile.objects.get(path=path, name=node)
     except ObjectDoesNotExist:
         pf = PicFile()
         pf.status = 'UN'
+        pf.path = path
+        pf.name = node
         pf.save()
     status = pf.status
-    folder, img = os.path.split(nodepath)
     return render(request, 'img.html', {'path': nodepath,
-                                        'img': img,
-                                        'folder': folder,
+                                        'img': node,
+                                        'folder': path,
                                         'status': STATUS[status]
                                        })
 
