@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block home %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+            <table id="id_list_table" class="table">
+                {% for entry in entries %}
+                    <tr><td>{{ entry |safe }}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
     <form action="/test_forms" method="post">
         {% csrf_token %}
         {{ formset.management_form }}
