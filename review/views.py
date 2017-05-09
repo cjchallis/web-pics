@@ -79,10 +79,9 @@ def run_del(request):
 
 
 def del_list(request):
-    to_del = PicFile.objects.filter(status="delete")
-    entries = [f.path for f in to_del]
-    args = {"entries": entries}
-    return render(request, 'del_list.html', args)
+    to_del = PicFile.objects.filter(status="DL")
+    entries = [os.path.join(f.path, f.name) for f in to_del]
+    return render(request, 'del_list.html', {"entries": entries})
 
 
 def view_dir(request, path):
@@ -101,9 +100,7 @@ def view_dir(request, path):
         entries = ['<a href="/">/..</a>']
     else:
         entries = ['<a href="/{0}/">/..</a>'.format(up)]
-    # dirs_pics = dirs + pics
-    dirs_pics = dirs
-    entries.extend([link.format(e, e) for e in dirs_pics])
+    entries.extend([link.format(e, e) for e in dirs])
     pic_paths = [os.path.join(path, p) for p in pics]
     args = {"entries": entries, "pics": pics, "path": path}
     return render(request, 'dir.html', args)
@@ -111,14 +108,7 @@ def view_dir(request, path):
 
 def view_img(request, nodepath):
     path, node = os.path.split(nodepath)
-    try:
-        pf = PicFile.objects.get(path=path, name=node)
-    except ObjectDoesNotExist:
-        pf = PicFile()
-        pf.status = 'UN'
-        pf.path = path
-        pf.name = node
-        pf.save()
+    pf = get_picfile(path, node)
     status = pf.status
     return render(request, 'img.html', {'path': nodepath,
                                         'img': node,
