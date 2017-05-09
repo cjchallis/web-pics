@@ -73,7 +73,7 @@ def home(request):
 def run_del(request):
     to_del = PicFile.objects.filter(status="DL")
     for f in to_del:
-        os.remove(os.path.join(PIC_ROOT, f.path))
+        os.remove(os.path.join(PIC_ROOT, f.path, f.name))
         f.delete()
     return redirect('/deletion_list')
 
