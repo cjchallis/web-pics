@@ -28,18 +28,12 @@ def test_forms(request):
         formset = PicFormSet(request.POST, request.FILES)
         for form in formset:
             if form.is_valid():
-                print(form)
                 form.save()
-        #form = PicForm(request.POST, instance=PicFile.objects.get(path=path))
-        #form.save()
     else:
         formset = PicFormSet(
             queryset=PicFile.objects.filter(path__startswith=relpath))
-        #form = PicForm(instance=PicFile.objects.get(path=path))
- #   formset[10].DELETE = True
     return render(request, 'test_forms.html', 
                   {
-                 #     "form": form,
                       "formset": formset
                   })
 
