@@ -31,13 +31,13 @@
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-            <img src="/static/{{ form.path.value|default_if_none:'' }}"
-                class="img-thumbnail"
-                alt="image">
+             <a href="/{{ form.path.value }}" class="thumbnail">
+                <img src="/static/{{ form.path.value }}" alt="{{ pic }}">
+            </a>
             </div>
         {% endfor %}
         </div>
-        <input type="submit" value = "Submit Set" />
+        <input type="submit" value = "Save Changes" />
     </form>
 {% endblock %}
 
