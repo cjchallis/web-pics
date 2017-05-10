@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'(.+)/$', views.view_dir, name = 'view_dir'),
     url(r'^deletion_list$', views.del_list, name = 'del_list'),
     url(r'^run_deletion$', views.run_del, name = 'run_del'),
+    url(r'^chatbooks$', views.chatbooks, name = 'chatbooks'),
     url(r'(.+)/next$', views.nxt, name = 'next'),
     url(r'(.+)/previous$', views.prev, name = 'prev'), 
     url(r'(.+)/(KP|DL|CH)$', views.modify, name = 'modify'),

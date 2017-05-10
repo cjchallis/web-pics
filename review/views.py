@@ -91,6 +91,12 @@ def del_list(request):
     return render(request, 'del_list.html', {"entries": entries})
 
 
+def chatbooks(request):
+    chat = PicFile.objects.filter(status="CH")
+    entries = [os.path.join(f.path, f.name) for f in chat]
+    return render(request, 'chatbooks.html', {"entries": entries})
+
+
 def view_img(request, nodepath):
     if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
         return render(request, 'not_found.html', {'url': nodepath}) 
