@@ -21,38 +21,42 @@ def get_picfile(path, name):
     try:
         pf = PicFile.objects.get(path=path, name=name)
     except ObjectDoesNotExist:
-        pf = PicFile()
-        pf.status = 'UN'
-        pf.path = path
-        pf.name = name
-        pf.save()
+        if os.path.isfile(os.path.join(PIC_ROOT, path, name)):
+            pf = PicFile()
+            pf.status = 'UN'
+            pf.path = path
+            pf.name = name
+            pf.save()
+        else:
+            pf = None
     return pf
 
 
-def view_dir(request, path):
-    if path is None:
-        path = ''
+def get_contents(path):
     contents = os.listdir(os.path.join(PIC_ROOT, path))
     dirs = [c + '/' for c in contents
             if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
     dirs.sort()
-    link = '<a href="{0}">{1}</a>'
-    up = os.path.split(path)[0]
-    if up == "":
+    pics = [p for p in contents
+            if os.path.isfile(os.path.join(PIC_ROOT, path, p))]
+    pics.sort()
+    return pics, dirs
+
+def view_dir(request, path):
+    if path is None:
+        path = ''
+    pics, dirs = get_contents(path)
+    # initializes PicFile for new images
+    for p in pics:
+        get_picfile(path, p)
+    up = "/{0}/".format(os.path.split(path)[0])
+    if up == "//":
         up = "/"
-    else:
-        up = "/{0}/".format(up)
     text = ["/.."]
     ref = [up]
     text.extend(dirs)
     ref.extend(dirs)
     entries = zip(ref, text)
-    relpath = path 
-    abspath = os.path.join(PIC_ROOT, relpath)
-    pics = [p for p in os.listdir(abspath)
-            if os.path.isfile(os.path.join(abspath, p))]
-    for p in pics:
-        get_picfile(path, p)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
@@ -60,8 +64,7 @@ def view_dir(request, path):
             if form.is_valid():
                 form.save()
     else:
-        formset = PicFormSet(
-            queryset=PicFile.objects.filter(path=relpath))
+        formset = PicFormSet(queryset=PicFile.objects.filter(path=path))
     return render(request, 'dir.html', 
                   {
                       "path": path,
@@ -101,13 +104,7 @@ def view_img(request, nodepath):
 
 def nxt(request, nodepath):
     path, node = os.path.split(nodepath)
-    contents = os.listdir(os.path.join(PIC_ROOT, path))
-    dirs = [c + '/' for c in contents
-            if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
-    dirs.sort()
-    pics = [c for c in contents
-            if os.path.isfile(os.path.join(PIC_ROOT, path, c))]
-    pics.sort()
+    pics, dirs = get_contents(path)
     current = pics.index(node)
     nxt = pics[(current + 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
@@ -115,23 +112,19 @@ def nxt(request, nodepath):
 
 def prev(request, nodepath):
     path, node = os.path.split(nodepath)
-    contents = os.listdir(os.path.join(PIC_ROOT, path))
-    dirs = [c + '/' for c in contents
-            if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
-    dirs.sort()
-    pics = [c for c in contents
-            if os.path.isfile(os.path.join(PIC_ROOT, path, c))]
-    pics.sort()
+    pics, dirs = get_contesnts(path)
     current = pics.index(node)
     nxt = pics[(current - 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
 
 
 def modify(request, nodepath, mod):
-    querySet = PicFile.objects.filter(path=nodepath)
+    path, node = os.path.split(nodepath)
+    querySet = PicFile.objects.filter(path=path, name=node)
     if not querySet:
         pic = PicFile()
-        pic.path = nodepath
+        pic.path = path
+        pic.name = node
     else:
         pic = querySet[0]
     pic.status = mod
