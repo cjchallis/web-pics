@@ -29,7 +29,7 @@ def get_picfile(path, name):
     return pf
 
 
-def test_forms(request, path):
+def view_dir(request, path):
     if path is None:
         path = ''
     contents = os.listdir(os.path.join(PIC_ROOT, path))
@@ -62,7 +62,7 @@ def test_forms(request, path):
     else:
         formset = PicFormSet(
             queryset=PicFile.objects.filter(path=relpath))
-    return render(request, 'test_forms.html', 
+    return render(request, 'dir.html', 
                   {
                       "path": path,
                       "entries": entries,
@@ -87,28 +87,6 @@ def del_list(request):
     entries = [os.path.join(f.path, f.name) for f in to_del]
     return render(request, 'del_list.html', {"entries": entries})
 
-
-def view_dir(request, path):
-    if path is None:
-        path = ''
-    contents = os.listdir(os.path.join(PIC_ROOT, path))
-    dirs = [c + '/' for c in contents
-            if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
-    dirs.sort()
-    pics = [c for c in contents
-            if os.path.isfile(os.path.join(PIC_ROOT, path, c))]
-    pics.sort()
-    link = '<a href="{0}">{1}</a>'
-    up = os.path.split(path)[0]
-    if up == "":
-        entries = ['<a href="/">/..</a>']
-    else:
-        entries = ['<a href="/{0}/">/..</a>'.format(up)]
-    entries.extend([link.format(e, e) for e in dirs])
-    pic_paths = [os.path.join(path, p) for p in pics]
-    args = {"entries": entries, "pics": pics, "path": path}
-    return render(request, 'dir.html', args)
-   
 
 def view_img(request, nodepath):
     path, node = os.path.split(nodepath)
