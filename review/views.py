@@ -39,10 +39,14 @@ def test_forms(request, path):
     link = '<a href="{0}">{1}</a>'
     up = os.path.split(path)[0]
     if up == "":
-        entries = ['<a href="/">/..</a>']
+        up = "/"
     else:
-        entries = ['<a href="/{0}/">/..</a>'.format(up)]
-    entries.extend([link.format(d, d) for d in dirs])
+        up = "/{0}/".format(up)
+    text = ["/.."]
+    ref = [up]
+    text.extend(dirs)
+    ref.extend(dirs)
+    entries = zip(ref, text)
     relpath = path 
     abspath = os.path.join(PIC_ROOT, relpath)
     pics = [p for p in os.listdir(abspath)
