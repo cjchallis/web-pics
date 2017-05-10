@@ -92,6 +92,8 @@ def del_list(request):
 
 
 def view_img(request, nodepath):
+    if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
+        return render(request, 'not_found.html', {'url': nodepath}) 
     path, node = os.path.split(nodepath)
     pf = get_picfile(path, node)
     status = pf.status
@@ -112,7 +114,7 @@ def nxt(request, nodepath):
 
 def prev(request, nodepath):
     path, node = os.path.split(nodepath)
-    pics, dirs = get_contesnts(path)
+    pics, dirs = get_contents(path)
     current = pics.index(node)
     nxt = pics[(current - 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
