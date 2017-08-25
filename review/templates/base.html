@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Review Pictures</title>
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
@@ -34,6 +36,9 @@
                     </li>
                     <li {% block del-list-active %}{% endblock %}>
                         <a href="/deletion_list">Deletion List</a>
+                    </li>
+                    <li {% block test-active %}{% endblock %}>
+                        <a href="/testing">Testing</a>
                     </li>
                 </ul>
             </div><!--/.nav-collapse -->

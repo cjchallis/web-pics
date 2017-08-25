@@ -139,3 +139,7 @@ def modify(request, nodepath, mod):
     pic.save()
     return redirect("/" + nodepath)
 
+
+def testing(request):
+    return render(request, 'testing.html')
+

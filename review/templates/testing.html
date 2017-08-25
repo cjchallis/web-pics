@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block test-active %}
+  class="active"
+{% endblock %}
+
+{% block head %}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <!--  <script src="/static/counties.js"></script> -->
+<style>
+
+path:hover {
+  fill-opacity: 0.7;
+}
+
+/* Style for Custom Tooltip */
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+/*  width: 60px; */                 
+  height: 42px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: white;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
+}
+
+div.tooltip-inner {
+/*  max-width: 350px;*/
+  white-space: pre-wrap;
+}
+
+</style>
+{% endblock %}
+
+{% block home %}
+  <script>
+    var width = 1200,
+        height = 800;
+
+    var div = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    var svg = d3.select('body')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+    var counties = svg.append('g');
+
+    var albersProjection = d3.geoAlbers()
+      .scale(6000)
+      .rotate([111.0937, 0])
+      .center([0, 39.3210])
+      .translate([width/2, height/2]);
+
+    var geoPath = d3.geoPath()
+      .projection(albersProjection);
+
+    function comma(x) {
+      return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    d3.csv("/static/county_peaks.csv", function(data) {
+      d3.json("/static/counties.json", function(json) {
+
+      for (var i = 0; i < data.length; i++) {
+        var peakCounty = data[i].County;
+        var peak = data[i].Peak;
+        var elev = data[i].Elevation;
+        for (var j = 0; j < json.features.length; j++) {
+          var jsonCounty = json.features[j].properties.name;
+          if (peakCounty == jsonCounty) {
+            json.features[j].properties.peak = peak;
+            json.features[j].properties.elev = elev; 
+            break;
+          }
+        }
+      }
+
+      counties.selectAll('path')
+        .data(json.features)
+        .enter()
+        .append('path')
+        .attr('fill', '#ccc')
+        .attr('d', geoPath)
+        .attr('stroke-width', 1.0)
+        .attr('stroke', "#fff")
+        .on("mouseover", function(d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div.html(d.properties.name + "<br>" + d.properties.peak +
+              "<br>" + comma(d.properties.elev) + " ft")
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+        })
+        .on("mousemove", function(d) {
+          div.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+        });
+      });
+    });
+
+
+    </script>
+{% endblock %}
+

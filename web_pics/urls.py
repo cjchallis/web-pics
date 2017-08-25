@@ -19,6 +19,7 @@ from review import views
 
 urlpatterns = [
     url(r'^$', views.home, name = 'home'),
+    url(r'^testing$', views.testing, name = 'testing'),
     url(r'(.+)/$', views.view_dir, name = 'view_dir'),
     url(r'^deletion_list$', views.del_list, name = 'del_list'),
     url(r'^run_deletion$', views.run_del, name = 'run_del'),
