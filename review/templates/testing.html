@@ -18,9 +18,9 @@ div.tooltip {
   position: absolute;           
   text-align: center;           
 /*  width: 60px; */                 
-  height: 42px;                 
+  height: 48px;                 
   padding: 2px;             
-  font: 12px sans-serif;        
+  font: 14px sans-serif;        
   background: white;   
   border: 0px;      
   border-radius: 8px;           
@@ -53,7 +53,7 @@ div.tooltip-inner {
     var counties = svg.append('g');
 
     var albersProjection = d3.geoAlbers()
-      .scale(6000)
+      .scale(8000)
       .rotate([111.0937, 0])
       .center([0, 39.3210])
       .translate([width/2, height/2]);
@@ -72,11 +72,13 @@ div.tooltip-inner {
         var peakCounty = data[i].County;
         var peak = data[i].Peak;
         var elev = data[i].Elevation;
+        var hiked = data[i].Hiked;
         for (var j = 0; j < json.features.length; j++) {
           var jsonCounty = json.features[j].properties.name;
           if (peakCounty == jsonCounty) {
             json.features[j].properties.peak = peak;
-            json.features[j].properties.elev = elev; 
+            json.features[j].properties.elev = elev;
+            json.features[j].properties.hiked = hiked;
             break;
           }
         }
@@ -86,7 +88,12 @@ div.tooltip-inner {
         .data(json.features)
         .enter()
         .append('path')
-        .attr('fill', '#ccc')
+        .attr('fill', function(d) {
+          if (d.properties.hiked == 1){
+           return '#43b';
+          } else {
+           return '#ccc';
+          }})
         .attr('d', geoPath)
         .attr('stroke-width', 1.0)
         .attr('stroke', "#fff")
