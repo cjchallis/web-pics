@@ -7,57 +7,59 @@
 {% block head %}
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <!--  <script src="/static/counties.js"></script> -->
-<style>
+  <style>
 
-path:hover {
-  fill-opacity: 0.7;
-}
+    path:hover {
+      fill-opacity: 0.7;
+    }
 
-/* Style for Custom Tooltip */
-div.tooltip {   
-  position: absolute;           
-  text-align: center;           
-/*  width: 60px; */                 
-  height: 60px;                 
-  padding: 2px;             
-  font: 15px sans-serif;        
-  background: white;   
-  border: 0px;      
-  border-radius: 8px;           
-  pointer-events: none;         
-}
+    /* Style for Custom Tooltip */
+    div.tooltip {   
+      position: absolute;           
+      text-align: center;           
+      height: 60px;                 
+      padding: 2px;             
+      font: 15px sans-serif;        
+      background: white;   
+      border: 0px;      
+      border-radius: 8px;           
+      pointer-events: none;         
+    }
 
-div.tooltip-inner {
-/*  max-width: 350px;*/
-  white-space: pre-wrap;
-}
 
-.tooltip_name {
-  font-size:18px;
-}
-.small_break{
-  font-size:4px;
-}
-</style>
+    div.tooltip-inner {
+      /*  max-width: 350px;*/
+      white-space: pre-wrap;
+    }
+
+    .tooltip_name {
+      font-size:18px;
+    }
+    .small_break{
+      font-size:4px;
+    }
+  </style>
 {% endblock %}
 
 {% block home %}
   <script>
+
     var width = 1200,
         height = 800,
         centered;
 
     var div = d3.select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
     var svg = d3.select('body')
     .append('svg')
     .attr('width', width)
-    .attr('height', height);
+        .attr('height', height);
 
     var counties = svg.append('g');
+    var circles = svg.append('g');
 
     var albersProjection = d3.geoAlbers()
       .scale(8000)
@@ -72,8 +74,54 @@ div.tooltip-inner {
       return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    function size(d) {
+      if (d.Highest == 1){
+        return 4;
+      } else {
+        return 3;
+      }
+    }
+
     d3.csv("/static/county_peaks2.csv", function(data) {
       d3.json("/static/counties.json", function(json) {
+
+      circles.selectAll("image")
+        .data(data)
+        .enter()
+        .append("svg:image")
+        .attr("xlink:href", "/static/mountain.png")
+        .attr("x", function(d) {
+          if (d.Highest == 1){
+            var height = 6;
+          } else {
+            var height = 4;
+          }
+          return albersProjection([d.Long, d.Lat])[0] - height / 2 ;
+        })
+        .attr("y", function(d) {
+         if (d.Highest == 1){
+            var height = 6;
+          } else {
+            var height = 4;
+          }
+          return albersProjection([d.Long, d.Lat])[1] - height / 2;
+        })
+        .attr("width", function(d) {
+          if (d.Highest == 1){
+            return 6;
+          } else {
+            return 4;
+          }
+        })
+        .attr("height", function(d) {
+          if (d.Highest == 1){
+            return 6;
+          } else {
+            return 4;
+          }
+        })
+        .style("opacity", 0);
+  
 
       for (var i = 0; i < data.length; i++) {
         var peakCounty = data[i].County;
@@ -156,11 +204,19 @@ div.tooltip-inner {
         y = centroid[1];
         k = 4;
         centered = d;
+        circles.selectAll("image")
+          .transition()
+          .duration(750)
+          .style("opacity", 0.85);
       } else {
         x = width / 2;
         y = height / 2;
         k = 1;
         centered = null;
+        circles.selectAll("image")
+          .transition()
+          .duration(750)
+          .style("opacity", 0);
       }
 
       counties.selectAll("path")
@@ -170,6 +226,11 @@ div.tooltip-inner {
         .duration(750)
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
         .style("stroke-width", 1.5 / k + "px");
+      circles.transition()
+        .duration(750)
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+        .style("stroke-width", 1.5 / k + "px");
+
     }
   </script>
 {% endblock %}
