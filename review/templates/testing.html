@@ -18,9 +18,9 @@ div.tooltip {
   position: absolute;           
   text-align: center;           
 /*  width: 60px; */                 
-  height: 48px;                 
+  height: 60px;                 
   padding: 2px;             
-  font: 14px sans-serif;        
+  font: 15px sans-serif;        
   background: white;   
   border: 0px;      
   border-radius: 8px;           
@@ -32,13 +32,20 @@ div.tooltip-inner {
   white-space: pre-wrap;
 }
 
+.tooltip_name {
+  font-size:18px;
+}
+.small_break{
+  font-size:4px;
+}
 </style>
 {% endblock %}
 
 {% block home %}
   <script>
     var width = 1200,
-        height = 800;
+        height = 800,
+        centered;
 
     var div = d3.select("body")
       .append("div")
@@ -65,7 +72,7 @@ div.tooltip-inner {
       return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    d3.csv("/static/county_peaks.csv", function(data) {
+    d3.csv("/static/county_peaks2.csv", function(data) {
       d3.json("/static/counties.json", function(json) {
 
       for (var i = 0; i < data.length; i++) {
@@ -73,12 +80,28 @@ div.tooltip-inner {
         var peak = data[i].Peak;
         var elev = data[i].Elevation;
         var hiked = data[i].Hiked;
+        var highest = data[i].Highest;
         for (var j = 0; j < json.features.length; j++) {
           var jsonCounty = json.features[j].properties.name;
           if (peakCounty == jsonCounty) {
-            json.features[j].properties.peak = peak;
-            json.features[j].properties.elev = elev;
-            json.features[j].properties.hiked = hiked;
+            if (highest == 1) {
+              json.features[j].properties.peak = peak;
+              json.features[j].properties.elev = elev;
+              json.features[j].properties.hiked_high = hiked;
+            } else {
+              json.features[j].properties.hiked_any = hiked;
+            }
+            var new_peak = {
+              "name"      : peak,
+              "elevation" : elev,
+              "hiked"     : hiked,
+              "lat"       : data[i].Lat,
+              "long"      : data[i].Long
+            }
+            if (!json.features[j].properties.hasOwnProperty("peaks")){
+              json.features[j].properties.peaks = [];
+            }
+            json.features[j].properties.peaks.push(new_peak);
             break;
           }
         }
@@ -89,19 +112,25 @@ div.tooltip-inner {
         .enter()
         .append('path')
         .attr('fill', function(d) {
-          if (d.properties.hiked == 1){
-           return '#43b';
+          if (d.properties.hiked_high == 1){
+            return '#43b';
+          } else if (d.properties.hiked_any == 1){
+            return '#88d';
           } else {
-           return '#ccc';
+            return '#ccc';
           }})
         .attr('d', geoPath)
         .attr('stroke-width', 1.0)
         .attr('stroke', "#fff")
+        .on("click", clicked)
         .on("mouseover", function(d) {
           div.transition()
             .duration(200)
             .style("opacity", .9);
-          div.html(d.properties.name + "<br>" + d.properties.peak +
+          div.html("<span class='tooltip_name'>" + 
+              d.properties.name + "</span>" +
+              '<div style="line-height:4px"/> <br> </div>' + 
+              d.properties.peak +
               "<br>" + comma(d.properties.elev) + " ft")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 28) + "px");
@@ -118,7 +147,30 @@ div.tooltip-inner {
       });
     });
 
+    function clicked(d) {
+      var x, y, k;
 
-    </script>
+      if (d && centered !== d) {
+        var centroid = geoPath.centroid(d);
+        x = centroid[0];
+        y = centroid[1];
+        k = 4;
+        centered = d;
+      } else {
+        x = width / 2;
+        y = height / 2;
+        k = 1;
+        centered = null;
+      }
+
+      counties.selectAll("path")
+        .classed("active", centered && function(d) { return d === centered; });
+
+      counties.transition()
+        .duration(750)
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+        .style("stroke-width", 1.5 / k + "px");
+    }
+  </script>
 {% endblock %}
 
