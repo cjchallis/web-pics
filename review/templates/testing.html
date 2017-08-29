@@ -17,7 +17,7 @@
     div.tooltip {   
       position: absolute;           
       text-align: center;           
-      height: 60px;                 
+ /*     height: 60px;                 */
       padding: 2px;             
       font: 15px sans-serif;        
       background: white;   
@@ -120,8 +120,24 @@
             return 4;
           }
         })
-        .style("opacity", 0);
-  
+        .style("opacity", 0)
+        .attr("visibility", "hidden")
+        .attr("pointer-events", "visible")
+        .on("mouseover", function(d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div.html("<span class='tooltip_name'>" + 
+            d.Peak +
+            "<br>" + comma(d.Elevation) + " ft")
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mousemove", function(d) {
+          div.style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+        });
+ 
 
       for (var i = 0; i < data.length; i++) {
         var peakCounty = data[i].County;
@@ -205,6 +221,7 @@
         k = 4;
         centered = d;
         circles.selectAll("image")
+          .attr("visibility", "visible")
           .transition()
           .duration(750)
           .style("opacity", 0.85);
@@ -216,7 +233,8 @@
         circles.selectAll("image")
           .transition()
           .duration(750)
-          .style("opacity", 0);
+          .style("opacity", 0)
+          .attr("visibility", "hidden");
       }
 
       counties.selectAll("path")
