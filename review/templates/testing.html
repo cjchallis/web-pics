@@ -17,7 +17,6 @@
     div.tooltip {   
       position: absolute;           
       text-align: center;           
- /*     height: 60px;                 */
       padding: 2px;             
       font: 15px sans-serif;        
       background: white;   
@@ -137,7 +136,10 @@
           div.style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
         });
- 
+
+      for (var j = 0; j < json.features.length; j++) {
+        json.features[j].properties.hiked_any = 0;
+      }
 
       for (var i = 0; i < data.length; i++) {
         var peakCounty = data[i].County;
@@ -152,7 +154,7 @@
               json.features[j].properties.peak = peak;
               json.features[j].properties.elev = elev;
               json.features[j].properties.hiked_high = hiked;
-            } else {
+            } else if (json.features[j].properties.hiked_any == 0){
               json.features[j].properties.hiked_any = hiked;
             }
             var new_peak = {
@@ -177,9 +179,13 @@
         .append('path')
         .attr('fill', function(d) {
           if (d.properties.hiked_high == 1){
-            return '#43b';
+            if (d.properties.hiked_any == 1){
+              return '#43b';
+            } else {
+              return '#76e';
+            }
           } else if (d.properties.hiked_any == 1){
-            return '#88d';
+              return '#aaa';
           } else {
             return '#ccc';
           }})
@@ -212,7 +218,7 @@
     });
 
     function clicked(d) {
-      var x, y, k;
+      var x, y, k, peak_opacity, peak_vis;
 
       if (d && centered !== d) {
         var centroid = geoPath.centroid(d);
@@ -220,21 +226,15 @@
         y = centroid[1];
         k = 4;
         centered = d;
-        circles.selectAll("image")
-          .attr("visibility", "visible")
-          .transition()
-          .duration(750)
-          .style("opacity", 0.85);
+        peak_opacity = 0.85;
+        peak_vis = "visible";
       } else {
         x = width / 2;
         y = height / 2;
         k = 1;
         centered = null;
-        circles.selectAll("image")
-          .transition()
-          .duration(750)
-          .style("opacity", 0)
-          .attr("visibility", "hidden");
+        peak_opacity = 0;
+        peak_vis = "hidden";
       }
 
       counties.selectAll("path")
@@ -244,11 +244,33 @@
         .duration(750)
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
         .style("stroke-width", 1.5 / k + "px");
-      circles.transition()
-        .duration(750)
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-        .style("stroke-width", 1.5 / k + "px");
-
+      if (peak_vis == "hidden"){
+        circles.selectAll("image")
+          .transition()
+          .duration(750)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px")
+          .style("opacity", peak_opacity)
+          .on("end", function() {
+            d3.select(this).attr("visibility", peak_vis)
+          });
+      } else {
+        circles.selectAll("image")
+          .transition()
+          .duration(750)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px")
+          .style("opacity", function(d) {
+            if (peak_opacity == 0){
+              return 0;
+            } else if (d.Hiked == 1){
+              return 0.9;
+            } else {
+              return 0.3;
+            }
+          })
+          .attr("visibility", peak_vis);
+      }
     }
   </script>
 {% endblock %}
