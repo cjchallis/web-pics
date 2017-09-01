@@ -32,6 +32,13 @@ def get_picfile(path, name):
     return pf
 
 
+def count_files(path):
+    if path == "/":
+        return sum([len(files) for r, d, files, in os.walk(PIC_ROOT)])
+    return sum([len(files) for r, d, files,
+                in os.walk(os.path.join(PIC_ROOT, path))])
+
+
 def get_contents(path):
     contents = os.listdir(os.path.join(PIC_ROOT, path))
     dirs = [c + '/' for c in contents
@@ -56,6 +63,11 @@ def view_dir(request, path):
     ref = [up]
     text.extend(dirs)
     ref.extend(dirs)
+    counts = [count_files(up)]
+    for dr in dirs:
+        counts.append(count_files(os.path.join(path, dr)))
+    for i in range(0, len(text)):
+        text[i] = ' '.join([text[i], str(counts[i])])
     entries = zip(ref, text)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
