@@ -49,6 +49,7 @@ def get_contents(path):
     pics.sort()
     return pics, dirs
 
+
 def view_dir(request, path):
     if path is None:
         path = ''
@@ -63,21 +64,25 @@ def view_dir(request, path):
     ref = [up]
     text.extend(dirs)
     ref.extend(dirs)
+    if up == "/":
+        up_path = "/"
+    else:
+        up_path = up[1:]
     counts = [count_files(up)]
-    unreviewed = PicFile.objects.filter(path__icontains=up)
-    unreviewed = unreviewed.exclude(status='UN')
-    un_counts = [counts[0] - unreviewed.count()]
-    for q in unreviewed:
-        print(q.path)
+    reviewed = PicFile.objects.filter(path__icontains=up_path)
+    reviewed = reviewed.exclude(status='UN')
+    rev_counts = [reviewed.count()]
+    table = list()
+    for q in reviewed:
+        print(q.path + '/' + q.name)
     for dr in dirs:
         print(dr[:-1])
         counts.append(count_files(os.path.join(path, dr)))
-        un_counts.append(unreviewed.filter(path__icontains=dr[:-1]).count())
-        print(unreviewed.filter(path__icontains=dr))
+        rev_counts.append(reviewed.filter(path__icontains=dr[:-1]).count())
+        print(reviewed.filter(path__icontains=dr))
     for i in range(0, len(text)):
-        text[i] = ' '.join([text[i], str(counts[i]),
-                            str(counts[i] - un_counts[i])])
-    entries = zip(ref, text)
+        table.append([text[i], str(rev_counts[i]), str(counts[i])])
+    entries = zip(ref, table)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
