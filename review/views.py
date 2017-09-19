@@ -64,10 +64,19 @@ def view_dir(request, path):
     text.extend(dirs)
     ref.extend(dirs)
     counts = [count_files(up)]
+    unreviewed = PicFile.objects.filter(path__icontains=up)
+    unreviewed = unreviewed.exclude(status='UN')
+    un_counts = [counts[0] - unreviewed.count()]
+    for q in unreviewed:
+        print(q.path)
     for dr in dirs:
+        print(dr[:-1])
         counts.append(count_files(os.path.join(path, dr)))
+        un_counts.append(unreviewed.filter(path__icontains=dr[:-1]).count())
+        print(unreviewed.filter(path__icontains=dr))
     for i in range(0, len(text)):
-        text[i] = ' '.join([text[i], str(counts[i])])
+        text[i] = ' '.join([text[i], str(counts[i]),
+                            str(counts[i] - un_counts[i])])
     entries = zip(ref, text)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
