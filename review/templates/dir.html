@@ -7,6 +7,11 @@ class="active"
 {% block home %}
 <div class="row">
   <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+    {% autoescape off %}
+    <h2>
+    {{ top_path|join:" > " }}
+    </h2>
+    {% endautoescape %}
     <table id="id_list_table" class="table table-striped table-hover">
       <tr><th class="text-center">Folder</th>
           <th class="text-center">Reviewed</th>

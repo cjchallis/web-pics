@@ -58,20 +58,28 @@ def view_dir(request, path):
     for p in pics:
         get_picfile(path, p)
     up = "/{0}/".format(os.path.split(path)[0])
+    npath = os.path.normpath(path)
+    comps = npath.split(os.sep)
+    top_refs = []
+    for i in range(0, len(comps)):
+        top_refs.append("/" + "/".join(comps[:i+1]) + "/")
+    top_path = zip(comps, top_refs)
+    top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
+    #top_path = ["{0}{1}".format(c, r) for r,c in top_path]
     if up == "//":
         up = "/"
-    text = ["/.."]
-    ref = [up]
+    text = []
+    ref = []
     text.extend(dirs)
     ref.extend(dirs)
     if up == "/":
         up_path = "/"
     else:
         up_path = up[1:]
-    counts = [count_files(up)]
+    counts = []
     reviewed = PicFile.objects.filter(path__icontains=up_path)
     reviewed = reviewed.exclude(status='UN')
-    rev_counts = [reviewed.count()]
+    rev_counts = []
     table = list()
     for q in reviewed:
         print(q.path + '/' + q.name)
@@ -94,6 +102,7 @@ def view_dir(request, path):
     return render(request, 'dir.html', 
                   {
                       "path": path,
+                      "top_path": top_path,
                       "entries": entries,
                       "formset": formset
                   })
