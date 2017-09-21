@@ -5,34 +5,51 @@
 
 
 {% block home %}
-    <div class="text-center">
-    <h1>{{ path }}</h1>
-        <h2>{{ status }}</h2>
-    </div>
+  <div class="text-center">
+  {% autoescape off %}
+    <h2>
+      {{ top_path|join:" > " }}
+    </h2>
+  {% endautoescape %}
+  <form action="/{{ path }}" method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
     <div class="row">
+      {% for form in formset %}
+      <div class="row">
         <div class="col-md-12">
-            <img src="/static/{{ path }}" class="img-thumbnail" alt="image">
+          <img src="/static/{{ path }}" class="img-thumbnail" alt="image">
         </div>
+      </div>
+      <div class="btn-group btn-group-justified" data-toggle="buttons">
+        {% for value, text in form.status.field.choices %}
+        <label for="id_form-{{ forloop.parentloop.counter0 }}-status_{{ forloop.counter0 }}"
+               class="btn btn-primary {% if form.status.value == value %}
+                                        active
+                                      {% endif %}
+                     "
+        >
+          <input type="radio"
+                 id="id_form-{{ forloop.parentloop.counter0 }}-status_{{ forloop.counter0 }}"
+                 name="form-{{ forloop.parentloop.counter0 }}-status"
+                 autocomplete="off"
+                 value="{{ value }}"
+                 {% if form.status.value == value %}
+                   checked="checked"
+                 {% endif %}
+          >
+          <span class="glyphicon glyphicon-{{ text }}"></span>
+        </label>
+        {% endfor %}
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+      {% endfor %}
     </div>
-    <div class="row">
-        <div class="col-md-2">
-            <a href="{{ img }}/CH">Add to Chatbooks</a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ img }}/KP">keep</a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ img }}/DL">delete</a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ img }}/next">next</a>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ img }}/previous">previous</a>
-        </div>
-        <div class="col-md-2">
-            <a href="/{{ folder }}/">Back to Folder</a>
-        </div>
-    </div>
+    <br>
+    {% if formset.0 %}
+      <button type="submit" class="btn btn-primary btn-lg"/>Save Changes</button>
+    {% endif %}
+  </form>  
 {% endblock %}
 

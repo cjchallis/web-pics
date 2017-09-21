@@ -135,13 +135,36 @@ def chatbooks(request):
 def view_img(request, nodepath):
     if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
         return render(request, 'not_found.html', {'url': nodepath}) 
+    npath = os.path.normpath(nodepath)
+    comps = npath.split(os.sep)
+    top_refs = []
+    for i in range(0, len(comps)):
+        top_refs.append("/" + "/".join(comps[:i+1]) + "/")
+    top_refs[-1] = top_refs[-1][:len(top_refs[-1])-1]
+    top_path = zip(comps, top_refs)
+    top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
+ 
     path, node = os.path.split(nodepath)
     pf = get_picfile(path, node)
     status = pf.status
-    return render(request, 'img.html', {'path': nodepath,
+    PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
+    if request.method == 'POST':
+        formset = PicFormSet(request.POST, request.FILES)
+        for form in formset:
+            if form.is_valid():
+                form.save()
+    else:
+        formset = PicFormSet(
+            #queryset=PicFile.objects.filter(path=path)
+            queryset=PicFile.objects.filter(path=path).filter(name=node)
+        )
+    print(formset)
+    return render(request, 'img.html', {'top_path': top_path,
+                                        'path': nodepath,
                                         'img': node,
                                         'folder': path,
-                                        'status': STATUS[status]
+                                        'status': STATUS[status],
+                                        'formset': formset
                                        })
 
 
