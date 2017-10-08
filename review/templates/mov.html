@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block pics-active %}
+    class="active"
+{% endblock %}
+
+
+{% block home %}
+  <div class="text-center">
+  {% autoescape off %}
+    <h2>
+      {{ top_path|join:" > " }}
+    </h2>
+  {% endautoescape %}
+  <div class="row">
+    <div class="col-md-12">
+      <video controls="controls" width="800" height="600" name="Mary"
+        src="/static/review/testing/staging/videos/video.mov">
+      </video>
+    </div>
+  </div>
+{% endblock %}
+
