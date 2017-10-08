@@ -4,6 +4,7 @@ from review.forms import PicForm
 from django.forms import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
+from copy import copy
 import datetime
 import os
 
@@ -33,6 +34,18 @@ def get_picfile(path, name):
     return pf
 
 
+def make_top_path(nodepath):
+    npath = os.path.normpath(nodepath)
+    comps = npath.split(os.sep)
+    top_refs = []
+    for i in range(0, len(comps)):
+        top_refs.append("/" + "/".join(comps[:i+1]) + "/")
+    #top_refs[-1] = top_refs[-1][:-1]
+    top_path = zip(comps, top_refs)
+    top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
+    return top_path
+
+
 def count_files(path):
     if path == "/":
         return sum([len(files) for r, d, files, in os.walk(PIC_ROOT)])
@@ -58,40 +71,20 @@ def view_dir(request, path):
     # initializes PicFile for new images
     for p in pics:
         get_picfile(path, p)
+    top_path = make_top_path(path)
     up = "/{0}/".format(os.path.split(path)[0])
-    npath = os.path.normpath(path)
-    comps = npath.split(os.sep)
-    top_refs = []
-    for i in range(0, len(comps)):
-        top_refs.append("/" + "/".join(comps[:i+1]) + "/")
-    top_path = zip(comps, top_refs)
-    top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
-    #top_path = ["{0}{1}".format(c, r) for r,c in top_path]
     if up == "//":
-        up = "/"
-    text = []
-    ref = []
-    text.extend(dirs)
-    ref.extend(dirs)
-    if up == "/":
-        up_path = "/"
+        up = up_path = "/"
     else:
         up_path = up[1:]
-    counts = []
+    ref = copy(dirs)
     reviewed = PicFile.objects.filter(path__icontains=up_path)
     reviewed = reviewed.exclude(status='UN')
-    rev_counts = []
-    table = list()
-    for q in reviewed:
-        print(q.path + '/' + q.name)
-    for dr in dirs:
-        print(dr[:-1])
-        counts.append(count_files(os.path.join(path, dr)))
-        rev_counts.append(reviewed.filter(path__icontains=dr[:-1]).count())
-        print(reviewed.filter(path__icontains=dr))
-    for i in range(0, len(text)):
-        table.append([text[i], str(rev_counts[i]), str(counts[i])])
-    entries = zip(ref, table)
+
+    counts = [str(count_files(os.path.join(path, dr))) for dr in dirs]
+    rev_cts = [reviewed.filter(path__icontains=dr[:-1]).count() for dr in dirs]
+
+    table = zip(ref, rev_cts, counts)
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
@@ -104,7 +97,7 @@ def view_dir(request, path):
                   {
                       "path": path,
                       "top_path": top_path,
-                      "entries": entries,
+                      "table": table,
                       "formset": formset
                   })
 
@@ -136,14 +129,7 @@ def chatbooks(request):
 def view_img(request, nodepath):
     if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
         return render(request, 'not_found.html', {'url': nodepath}) 
-    npath = os.path.normpath(nodepath)
-    comps = npath.split(os.sep)
-    top_refs = []
-    for i in range(0, len(comps)):
-        top_refs.append("/" + "/".join(comps[:i+1]) + "/")
-    top_refs[-1] = top_refs[-1][:len(top_refs[-1])-1]
-    top_path = zip(comps, top_refs)
-    top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
+    top_path = make_top_path(nodepath)
     time_stamp = os.path.getmtime(os.path.join(PIC_ROOT, nodepath))
     pic_date = datetime.datetime.fromtimestamp(time_stamp)
     year = pic_date.year
@@ -209,6 +195,9 @@ def testing(request):
     return render(request, 'testing.html')
 
 
-def video(request):
+def video(request, nodepath):
+    if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
+        return render(request, 'not_found.html', {'url': nodepath}) 
+    top_path = make_top_path(nodepath)
     return render(request, 'mov.html')
 

@@ -16,10 +16,10 @@
       <tr><th class="text-center">Folder</th>
           <th class="text-center">Reviewed</th>
           <th class="text-center">Total</th></tr>
-      {% for ref, table in entries %}
-      <tr><td><a href="{{ ref }}">{{ table.0 }}</td>
-        <td class="text-center">{{ table.1 }}</td>
-        <td class="text-center">{{ table.2 }}</td>
+      {% for row in table %}
+      <tr><td><a href="{{ row.0 }}">{{ row.0 }}</td>
+        <td class="text-center">{{ row.1 }}</td>
+        <td class="text-center">{{ row.2 }}</td>
       </tr>
       {% endfor %}
     </table>
