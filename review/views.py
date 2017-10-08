@@ -4,6 +4,7 @@ from review.forms import PicForm
 from django.forms import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
+import datetime
 import os
 
 cur_path = os.path.realpath(__file__)
@@ -143,7 +144,11 @@ def view_img(request, nodepath):
     top_refs[-1] = top_refs[-1][:len(top_refs[-1])-1]
     top_path = zip(comps, top_refs)
     top_path = ["<a href='{0}'>{1}</a>".format(c, r) for r,c in top_path]
- 
+    time_stamp = os.path.getmtime(os.path.join(PIC_ROOT, nodepath))
+    pic_date = datetime.datetime.fromtimestamp(time_stamp)
+    year = pic_date.year
+    month = pic_date.month
+    day = pic_date.day
     path, node = os.path.split(nodepath)
     pf = get_picfile(path, node)
     status = pf.status
@@ -158,13 +163,15 @@ def view_img(request, nodepath):
             #queryset=PicFile.objects.filter(path=path)
             queryset=PicFile.objects.filter(path=path).filter(name=node)
         )
-    print(formset)
     return render(request, 'img.html', {'top_path': top_path,
                                         'path': nodepath,
                                         'img': node,
                                         'folder': path,
                                         'status': STATUS[status],
-                                        'formset': formset
+                                        'formset': formset,
+                                        'year': year,
+                                        'month': month,
+                                        'day': day
                                        })
 
 
@@ -200,4 +207,8 @@ def modify(request, nodepath, mod):
 
 def testing(request):
     return render(request, 'testing.html')
+
+
+def video(request):
+    return render(request, 'mov.html')
 
