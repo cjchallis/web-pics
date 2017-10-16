@@ -11,7 +11,10 @@ import os
 cur_path = os.path.realpath(__file__)
 review = os.path.split(cur_path)[0]
 web_pics = os.path.split(review)[0]
-PIC_ROOT = os.path.join(web_pics, "review", "static")
+PIC_ROOT = os.path.join(web_pics, "review", "static", "review", "pics")
+VID_ROOT = os.path.join(web_pics, "review", "static", "review", "videos")
+PIC_EXT = [".jpg", ".png", ".bmp"]
+VID_EXT = [".mp4", ".mov"]
 
 STATUS = {PicFile.KEEP: "Saved",
           PicFile.DELETE: "To Delete",
@@ -19,15 +22,24 @@ STATUS = {PicFile.KEEP: "Saved",
           PicFile.CHATBOOKS: "In Chatbooks"
          }
 
-def get_picfile(path, name):
+def get_picfile(path, name, root):
     try:
         pf = PicFile.objects.get(path=path, name=name)
     except ObjectDoesNotExist:
-        if os.path.isfile(os.path.join(PIC_ROOT, path, name)):
+        if os.path.isfile(os.path.join(root, path, name)):
             pf = PicFile()
             pf.status = 'UN'
             pf.path = path
             pf.name = name
+            filename, ext = os.path.splitext(name)
+            print(filename + "  " + ext)
+            if ext in PIC_EXT:
+                print(name + " is a pic file")
+                pf.filetype = PicFile.IMAGE 
+            elif ext in VID_EXT:
+                pf.filetype = PicFile.VIDEO
+                pf.thumbnail = os.path.join("static", "review", "thumbnails",
+                                            path, filename + ".jpg")
             pf.save()
         else:
             pf = None
@@ -46,20 +58,20 @@ def make_top_path(nodepath):
     return top_path
 
 
-def count_files(path):
+def count_files(path, root):
     if path == "/":
-        return sum([len(files) for r, d, files, in os.walk(PIC_ROOT)])
+        return sum([len(files) for r, d, files, in os.walk(root)])
     return sum([len(files) for r, d, files,
-                in os.walk(os.path.join(PIC_ROOT, path))])
+                in os.walk(os.path.join(root, path))])
 
 
-def get_contents(path):
-    contents = os.listdir(os.path.join(PIC_ROOT, path))
+def get_contents(path, root):
+    contents = os.listdir(os.path.join(root, path))
     dirs = [c + '/' for c in contents
-            if os.path.isdir(os.path.join(PIC_ROOT, path, c))]
+            if os.path.isdir(os.path.join(root, path, c))]
     dirs.sort()
     pics = [p for p in contents
-            if os.path.isfile(os.path.join(PIC_ROOT, path, p))]
+            if os.path.isfile(os.path.join(root, path, p))]
     pics.sort()
     return pics, dirs
 
@@ -67,11 +79,11 @@ def get_contents(path):
 def view_dir(request, path):
     if path is None:
         path = ''
-    pics, dirs = get_contents(path)
+    pics, dirs = get_contents(path, PIC_ROOT)
     # initializes PicFile for new images
     for p in pics:
-        get_picfile(path, p)
-    top_path = make_top_path(path)
+        get_picfile(path, p, PIC_ROOT)
+    top_path = make_top_path(os.path.join("pics", path))
     up = "/{0}/".format(os.path.split(path)[0])
     if up == "//":
         up = up_path = "/"
@@ -81,10 +93,10 @@ def view_dir(request, path):
     reviewed = PicFile.objects.filter(path__icontains=up_path)
     reviewed = reviewed.exclude(status='UN')
 
-    counts = [str(count_files(os.path.join(path, dr))) for dr in dirs]
+    counts = [str(count_files(os.path.join(path, dr), PIC_ROOT)) for dr in dirs]
     rev_cts = [reviewed.filter(path__icontains=dr[:-1]).count() for dr in dirs]
 
-    table = zip(ref, rev_cts, counts)
+    table = list(zip(ref, rev_cts, counts))
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
@@ -98,7 +110,7 @@ def view_dir(request, path):
                       "path": path,
                       "top_path": top_path,
                       "table": table,
-                      "formset": formset
+                      "formset": formset,
                   })
 
 
@@ -136,7 +148,7 @@ def view_img(request, nodepath):
     month = pic_date.month
     day = pic_date.day
     path, node = os.path.split(nodepath)
-    pf = get_picfile(path, node)
+    pf = get_picfile(path, node, PIC_ROOT)
     status = pf.status
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
     if request.method == 'POST':
@@ -163,7 +175,7 @@ def view_img(request, nodepath):
 
 def nxt(request, nodepath):
     path, node = os.path.split(nodepath)
-    pics, dirs = get_contents(path)
+    pics, dirs = get_contents(path, PIC_ROOT)
     current = pics.index(node)
     nxt = pics[(current + 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
@@ -171,7 +183,7 @@ def nxt(request, nodepath):
 
 def prev(request, nodepath):
     path, node = os.path.split(nodepath)
-    pics, dirs = get_contents(path)
+    pics, dirs = get_contents(path, PIC_ROOT)
     current = pics.index(node)
     nxt = pics[(current - 1) % len(pics)]
     return redirect("/{0}/{1}".format(path, nxt))
@@ -196,8 +208,51 @@ def testing(request):
 
 
 def video(request, nodepath):
-    if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
+    if not os.path.isfile(os.path.join(VID_ROOT, nodepath)):
         return render(request, 'not_found.html', {'url': nodepath}) 
     top_path = make_top_path(nodepath)
     return render(request, 'mov.html')
+
+
+
+def vid_dir(request, path):
+    if path is None:
+        path = ''
+    vids, dirs = get_contents(path, VID_ROOT)
+    print(vids)
+    print(dirs)
+    # initializes PicFile for new images
+    for v in vids:
+        get_picfile(path, v, VID_ROOT)
+    top_path = make_top_path(os.path.join("videos", path))
+    up = "/{0}/".format(os.path.split(path)[0])
+    if up == "//":
+        up = up_path = "/"
+    else:
+        up_path = up[1:]
+    ref = copy(dirs)
+    reviewed = PicFile.objects.filter(path__icontains=up_path)
+    reviewed = reviewed.exclude(status='UN')
+
+    counts = [str(count_files(os.path.join(path, dr), VID_ROOT)) for dr in dirs]
+    rev_cts = [reviewed.filter(path__icontains=dr[:-1]).count() for dr in dirs]
+
+    table = list(zip(ref, rev_cts, counts))
+    print(table)
+    PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
+    if request.method == 'POST':
+        formset = PicFormSet(request.POST, request.FILES)
+        for form in formset:
+            if form.is_valid():
+                form.save()
+    else:
+        formset = PicFormSet(queryset=PicFile.objects.filter(path=path))
+    return render(request, 'vid-dir.html', 
+                  {
+                      "path": path,
+                      "top_path": top_path,
+                      "table": table,
+                      "formset": formset,
+                  })
+
 

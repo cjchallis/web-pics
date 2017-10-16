@@ -12,17 +12,19 @@
       {{ top_path|join:" > " }}
     </h2>
     {% endautoescape %}
-    <table id="id_list_table" class="table table-striped table-hover">
-      <tr><th class="text-center">Folder</th>
-          <th class="text-center">Reviewed</th>
-          <th class="text-center">Total</th></tr>
-      {% for row in table %}
-      <tr><td><a href="{{ row.0 }}">{{ row.0 }}</td>
-        <td class="text-center">{{ row.1 }}</td>
-        <td class="text-center">{{ row.2 }}</td>
-      </tr>
-      {% endfor %}
-    </table>
+    {% if table.0 %}
+      <table id="id_list_table" class="table table-striped table-hover">
+        <tr><th class="text-center">Folder</th>
+            <th class="text-center">Reviewed</th>
+            <th class="text-center">Total</th></tr>
+        {% for row in table %}
+        <tr><td><a href="{{ row.0 }}">{{ row.0 }}</td>
+          <td class="text-center">{{ row.1 }}</td>
+          <td class="text-center">{{ row.2 }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
   </div>
 </div>
 <form action="/{{ path }}/" method="post">
@@ -55,9 +57,17 @@
         {% for hidden in form.hidden_fields %}
           {{ hidden }}
         {% endfor %}
-        <a href="/{{ form.path.value }}/{{ form.name.value }}" class="thumbnail">
-          <img src="/static/{{ form.path.value }}/{{ form.name.value }}" alt="{{ pic }}">
-        </a>
+        {% if form.filetype.value == "PIC" %}
+          <a href="/{{ form.path.value }}/{{ form.name.value }}" class="thumbnail">
+            <img src="/static/review/pics/{{ form.path.value }}/{{ form.name.value }}" alt="{{ pic }}">
+          </a>
+        {% endif %}
+        {% if form.filetype.value == "VID" %}
+          <video controls="controls" width="100%" height="auto"
+            src="/static/review/pics/{{ form.path.value }}/{{ form.name.value }}" 
+            poster="/{{ form.thumbnail.value }}"
+          </video>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
