@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equic="X-UA-Compatible" content="IE-edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,66 +9,69 @@
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     {% block head %}
     {% endblock %}
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-               </button>
-                <a class="navbar-brand" href="#">Challis Family Pictures</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li {% block home-active %}{% endblock %}>
-                        <a href="/">Home</a>
-                    </li>
-                    <li {% block pics-active %}{% endblock %}>
-                        <a href="/review/">Pictures</a>
-                    </li>
-                    <li {% block fav-active %}{% endblock %}>
-                        <a href="/chatbooks">Chatbooks</a>
-                    </li>
-                    <li {% block del-list-active %}{% endblock %}>
-                        <a href="/deletion_list">Deletion List</a>
-                    </li>
-                    <li {% block test-active %}{% endblock %}>
-                        <a href="/testing">Testing</a>
-                    </li>
-                </ul>
-            </div><!--/.nav-collapse -->
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Challis Family Pictures</a>
         </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li {% block home-active %}{% endblock %}>
+              <a href="/">Home</a>
+            </li>
+            <li {% block pics-active %}{% endblock %}>
+              <a href="/pics/">Pictures</a>
+            </li>
+            <li {% block vids-active %}{% endblock %}>
+              <a href="/videos/">Videos</a>
+            </li>
+            <li {% block fav-active %}{% endblock %}>
+              <a href="/chatbooks">Chatbooks</a>
+            </li>
+            <li {% block del-list-active %}{% endblock %}>
+              <a href="/deletion_list">Deletion List</a>
+            </li>
+            <li {% block test-active %}{% endblock %}>
+              <a href="/testing">Testing</a>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
     </nav>
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12"> 
-                <div class="home-text"> 
-                    {% block home %}
-                    {% endblock %}
-                </div>
-            </div>
-        </div> 
+      <div class="row">
+        <div class="col-xs-12"> 
+          <div class="home-text"> 
+            {% block home %}
+            {% endblock %}
+          </div>
+        </div>
+      </div> 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-</body>
+  </body>
 
-<style>
+  <style>
 body {
-    padding-top: 50px;
+  padding-top: 50px;
 }
 .home-text {
-    padding: 40px 15px;
-    text-align: center;
+  padding: 40px 15px;
+  text-align: center;
 }
 {% block style %}
 {% endblock %}
-</style>
+  </style>
 
 </html>
 
