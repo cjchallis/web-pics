@@ -20,8 +20,6 @@ from review import views
 urlpatterns = [
     url(r'^$', views.home, name = 'home'),
     url(r'^testing$', views.testing, name = 'testing'),
-    url(r'^videos()/$', views.vid_dir, name = 'root_video'),
-    url(r'^videos/(.+)/$', views.vid_dir, name = 'video'),
     url(r'^pics()/$', views.view_dir, name = 'root_pic'),
     url(r'^pics/(.+)/$', views.view_dir, name = 'view_dir'),
     url(r'^deletion_list$', views.del_list, name = 'del_list'),
