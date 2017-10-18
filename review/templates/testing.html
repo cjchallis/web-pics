@@ -8,6 +8,10 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
 
+    img {
+          image-orientation: from-image;
+    }
+
     path:hover {
       fill-opacity: 0.7;
     }
@@ -40,45 +44,51 @@
 {% endblock %}
 
 {% block home %}
-  <button type="button" class="btn btn-primary" data-toggle="modal"
-          data-target="#exampleModal">
-    Launch modal
-  </button>
+ 
+  <!-- Picture modals for each hiked peak -->
+  {% for peak, dir, files in entries %}
+    <div class="modal fade" id="{{ dir }}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">{{ peak }}</h5>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+                  {% for file in files %}
+                    <img src="/{{ file }}" class="img-thumbnail">          
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+         </div>
+      </div>
+    </div>
+  {% endfor %}
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+  <!-- Modal for peaks not hiked yet -->
+  <div class="modal fade" id="none" tabindex="-1" role="dialog"
        aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal"
-                  aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-12">
-                <img src="/static/review/thumbnails/dir0/video.jpg"
-                  class="img-thumbnail"
-                >          
               </div>
             </div>
           </div>
-          Here is a modal
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-          <button type="button" class="btn btn-primary">
-            Save changes
-          </button>
+          No pictures for this mountain. 
         </div>
       </div>
     </div>
   </div>
+
+
   <script>
 
     var width = 1200,
@@ -119,7 +129,7 @@
       }
     }
 
-    d3.csv("/static/county_peaks2.csv", function(data) {
+    d3.csv("/static/county_peaks.csv", function(data) {
       d3.json("/static/counties.json", function(json) {
 
       // Peaks 
@@ -162,7 +172,9 @@
         .attr("visibility", "hidden")
         .attr("pointer-events", "visible")
         .on("click", function(d) {
-          $('#exampleModal').modal('show')
+          var name = "#" + "timp" + "";
+          $('#' + d.Dir).modal('show');
+     //     $('#' + 'none').modal('show')
         })
         .on("mouseover", function(d) {
           div.transition()

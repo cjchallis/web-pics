@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from copy import copy
 import datetime
 import os
+import pandas as pd
 
 cur_path = os.path.realpath(__file__)
 review = os.path.split(cur_path)[0]
@@ -204,7 +205,17 @@ def modify(request, nodepath, mod):
 
 
 def testing(request):
-    return render(request, 'testing.html')
+    df = pd.read_csv(os.path.join(web_pics, "review", "static",
+                                  "county_peaks2.csv"))
+    df = df.loc[df['Dir'] != 'none']
+    dirs = list(df['Dir'])
+    peaks = df['Peak']
+    files = []
+    for i in range(len(dirs)):
+        files.append([os.path.join("static", "mountains", dirs[i], f)
+            for f in os.listdir(os.path.join(web_pics, "review", "static",
+                                             "mountains", dirs[i]))])
+    return render(request, 'testing.html', {"entries": zip(peaks, dirs, files)})
 
 
 def video(request, nodepath):
@@ -212,47 +223,4 @@ def video(request, nodepath):
         return render(request, 'not_found.html', {'url': nodepath}) 
     top_path = make_top_path(nodepath)
     return render(request, 'mov.html')
-
-
-
-def vid_dir(request, path):
-    if path is None:
-        path = ''
-    vids, dirs = get_contents(path, VID_ROOT)
-    print(vids)
-    print(dirs)
-    # initializes PicFile for new images
-    for v in vids:
-        get_picfile(path, v, VID_ROOT)
-    top_path = make_top_path(os.path.join("videos", path))
-    up = "/{0}/".format(os.path.split(path)[0])
-    if up == "//":
-        up = up_path = "/"
-    else:
-        up_path = up[1:]
-    ref = copy(dirs)
-    reviewed = PicFile.objects.filter(path__icontains=up_path)
-    reviewed = reviewed.exclude(status='UN')
-
-    counts = [str(count_files(os.path.join(path, dr), VID_ROOT)) for dr in dirs]
-    rev_cts = [reviewed.filter(path__icontains=dr[:-1]).count() for dr in dirs]
-
-    table = list(zip(ref, rev_cts, counts))
-    print(table)
-    PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
-    if request.method == 'POST':
-        formset = PicFormSet(request.POST, request.FILES)
-        for form in formset:
-            if form.is_valid():
-                form.save()
-    else:
-        formset = PicFormSet(queryset=PicFile.objects.filter(path=path))
-    return render(request, 'vid-dir.html', 
-                  {
-                      "path": path,
-                      "top_path": top_path,
-                      "table": table,
-                      "formset": formset,
-                  })
-
 
