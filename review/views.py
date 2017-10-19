@@ -27,20 +27,26 @@ def get_picfile(path, name, root):
     try:
         pf = PicFile.objects.get(path=path, name=name)
     except ObjectDoesNotExist:
-        if os.path.isfile(os.path.join(root, path, name)):
+        file_path = os.path.join(root, path, name)
+        if os.path.isfile(file_path):
             pf = PicFile()
             pf.status = 'UN'
             pf.path = path
             pf.name = name
             filename, ext = os.path.splitext(name)
-            print(filename + "  " + ext)
             if ext in PIC_EXT:
-                print(name + " is a pic file")
                 pf.filetype = PicFile.IMAGE 
             elif ext in VID_EXT:
                 pf.filetype = PicFile.VIDEO
                 pf.thumbnail = os.path.join("static", "review", "thumbnails",
                                             path, filename + ".jpg")
+                thm_path = os.path.join(web_pics, "review", pf.thumbnail)
+                if not os.path.isfile(thm_path):
+                    os.system(
+                        "ffmpeg -ss 00:00:00 -i {0} -frames:v 1 {1}".format(
+                        file_path, thm_path)
+                    )
+
             pf.save()
         else:
             pf = None
