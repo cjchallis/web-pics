@@ -5,6 +5,7 @@ from django.forms import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from copy import copy
+from random import sample
 import datetime
 import os
 import pandas as pd
@@ -122,7 +123,20 @@ def view_dir(request, path):
 
 
 def home(request):
-    return render(request, 'home.html')
+    all_pics = []
+    for root, path, files in os.walk(PIC_ROOT):
+        all_pics.extend([os.path.join(root, f) for f in files])
+    samp = sample(all_pics, 3)
+    for pic in samp:
+        if os.path.splitext(pic)[1] not in PIC_EXT:
+            samp.pop(samp.index(pic))
+    for i in range(len(samp)):
+        npath = os.path.normpath(samp[i])
+        l = npath.split(os.sep)
+        samp[i] = "/" + "/".join(l[l.index("static"):])
+
+
+    return render(request, 'home.html', {"pics": samp})
 
 
 def run_del(request):
