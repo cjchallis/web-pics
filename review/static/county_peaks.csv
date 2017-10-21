@@ -11,7 +11,7 @@ Juab County,Ibapah Peak,12087,0,1,39.8283,-113.9197,none
 Utah County,Mount Nebo,11928,0,1,39.8216,-111.7599,none
 Sevier County,Fish Lake Hightop,11633,0,1,38.6135856,-111.7321339,none
 Garfield County,Mount Ellen,11522,0,1,38.1097,-110.8138,none
-Salt Lake County,American Fork Twin Peaks,11489,1,1,40.5519,-111.6566,none
+Salt Lake County,American Fork Twin Peaks,11489,1,1,40.5519,-111.6566,twinpeaks
 Wayne County,Bluebell Knoll,11328,0,1,38.1597,-111.4999,none
 Iron County,Brian Head,11307,0,1,37.6928,-112.8508,none
 Sanpete County,South Tent Mountain,11285,0,1,39.3922,-111.3574,none
@@ -29,7 +29,7 @@ Davis County,Thurston Peak,9706,0,1,41.0819,-111.8516,none
 Morgan County,Thurston Peak,9706,0,1,41.0819,-111.8516,none
 Rich County,Bridger Peak,9255,0,1,41.9991,-111.4769,none
 Utah County,Mount Timpanogos,11752,1,0,40.3908,-111.6458,timp
-Utah County,Box Elder Peak,11101,1,0,40.4902,-111.6963,none
+Utah County,Box Elder Peak,11101,1,0,40.4902,-111.6963,boxelder
 Utah County,Lone Peak,11253,0,0,40.5266,-111.756,none
 Utah County,Cascade Mountain,10908,0,0,40.3072,-111.5888,none
 Utah County,Santaquin Peak,10685,0,0,39.9833,-111.6241,none
