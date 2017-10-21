@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block head %}
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/static/d3.v4.min.js"></script>
   <style>
 
     path:hover {
@@ -174,7 +174,9 @@
         .on("click", function(d) {
           var name = "#" + "timp" + "";
           $('#' + d.Dir).modal('show');
-     //     $('#' + 'none').modal('show')
+          div.transition()
+            .duration(200)
+            .style("opacity", 0);
         })
         .on("mouseover", function(d) {
           div.transition()
