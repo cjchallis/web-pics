@@ -226,7 +226,7 @@ def modify(request, nodepath, mod):
 
 def testing(request):
     df = pd.read_csv(os.path.join(web_pics, "review", "static",
-                                  "county_peaks2.csv"))
+                                  "county_peaks.csv"))
     df = df.loc[df['Dir'] != 'none']
     dirs = list(df['Dir'])
     peaks = df['Peak']
