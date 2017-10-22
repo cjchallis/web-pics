@@ -230,12 +230,16 @@ def testing(request):
     df = df.loc[df['Dir'] != 'none']
     dirs = list(df['Dir'])
     peaks = df['Peak']
+    dates = df['Date']
     files = []
     for i in range(len(dirs)):
         files.append([os.path.join("static", "mountains", dirs[i], f)
             for f in os.listdir(os.path.join(web_pics, "review", "static",
                                              "mountains", dirs[i]))])
-    return render(request, 'testing.html', {"entries": zip(peaks, dirs, files)})
+    return render(request, 'testing.html', {"entries": zip(peaks,
+                                                           dirs,
+                                                           dates,
+                                                           files)})
 
 
 def video(request, nodepath):
