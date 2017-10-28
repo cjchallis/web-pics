@@ -239,7 +239,8 @@
         .attr('fill', function(d) {
           if (d.properties.hiked_high == 1){
             if (d.properties.hiked_any == 1){
-              return '#43b';
+              // return '#43b';
+              return '#76e';
             } else {
               return '#76e';
             }
@@ -288,6 +289,16 @@
         centered = d;
         peak_opacity = 0.85;
         peak_vis = "visible";
+        var css = "path:hover { fill-opacity: 1.0}";
+        var style = document.createElement("style");
+        if (style.styleSheet) {
+              style.styleSheet.cssText = css;
+        } else {
+              style.appendChild(document.createTextNode(css));
+        }
+
+        document.getElementsByTagName('head')[0].appendChild(style);
+
       } else {
         x = width / 2;
         y = height / 2;
@@ -295,6 +306,18 @@
         centered = null;
         peak_opacity = 0;
         peak_vis = "hidden";
+        peak_vis = "visible";
+        var css = "path:hover { fill-opacity: 0.7}";
+        var style = document.createElement("style");
+        if (style.styleSheet) {
+              style.styleSheet.cssText = css;
+        } else {
+              style.appendChild(document.createTextNode(css));
+        }
+
+        document.getElementsByTagName('head')[0].appendChild(style);
+
+
       }
 
       counties.selectAll("path")
