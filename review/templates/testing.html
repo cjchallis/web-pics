@@ -8,6 +8,12 @@
   <script src="/static/d3.v4.min.js"></script>
   <style>
 
+    @media screen and (min-width: 768px) {
+      .wide-modal {
+        width: 70%; /* either % (e.g. 60%) or px (400px) */
+      }
+    }
+
     path:hover {
       fill-opacity: 0.7;
     }
@@ -49,7 +55,7 @@
   {% for peak, dir, day, files in entries %}
     <div class="modal fade" id="{{ dir }}" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog wide-modal" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h2 class="modal-title" id="{{ dir }}">{{ peak }}</h2>
