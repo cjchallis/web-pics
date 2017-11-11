@@ -3,6 +3,6 @@ db.sqlite3
 __pycache__
 *.pyc
 review/migrations
-*.jpg
-*.JPG
+review/static/pics
+review/static/vids
 
