@@ -130,6 +130,8 @@ def home(request):
     for pic in samp:
         if os.path.splitext(pic)[1] not in PIC_EXT:
             samp.pop(samp.index(pic))
+            print(pic)
+
     for i in range(len(samp)):
         npath = os.path.normpath(samp[i])
         l = npath.split(os.sep)
