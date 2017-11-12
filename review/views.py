@@ -126,7 +126,7 @@ def home(request):
     all_pics = []
     for root, path, files in os.walk(PIC_ROOT):
         all_pics.extend([os.path.join(root, f) for f in files])
-    samp = sample(all_pics, 3)
+    samp = sample(all_pics, 7)
     for pic in samp:
         if os.path.splitext(pic)[1] not in PIC_EXT:
             samp.pop(samp.index(pic))
@@ -134,7 +134,6 @@ def home(request):
         npath = os.path.normpath(samp[i])
         l = npath.split(os.sep)
         samp[i] = "/" + "/".join(l[l.index("static"):])
-
 
     return render(request, 'home.html', {"pics": samp})
 
