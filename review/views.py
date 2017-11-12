@@ -15,7 +15,7 @@ review = os.path.split(cur_path)[0]
 web_pics = os.path.split(review)[0]
 PIC_ROOT = os.path.join(web_pics, "review", "static", "review", "pics")
 VID_ROOT = os.path.join(web_pics, "review", "static", "review", "videos")
-PIC_EXT = [".jpg", ".png", ".bmp"]
+PIC_EXT = [".jpg", ".png", ".bmp", ".JPG", ".PNG", ".BMP"]
 VID_EXT = [".mp4", ".mov"]
 
 STATUS = {PicFile.KEEP: "Saved",
