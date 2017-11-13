@@ -27,7 +27,7 @@
     {% endif %}
   </div>
 </div>
-<form action="/{{ path }}/" method="post">
+<form action="/pics/{{ path }}/" method="post">
   {% csrf_token %}
   {{ formset.management_form }}
   <div class="row">
