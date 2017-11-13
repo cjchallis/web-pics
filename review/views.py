@@ -168,7 +168,7 @@ def chatbooks(request):
 def view_img(request, nodepath):
     if not os.path.isfile(os.path.join(PIC_ROOT, nodepath)):
         return render(request, 'not_found.html', {'url': nodepath}) 
-    top_path = make_top_path(nodepath)
+    top_path = make_top_path(os.path.join("pics", nodepath))
     time_stamp = os.path.getmtime(os.path.join(PIC_ROOT, nodepath))
     pic_date = datetime.datetime.fromtimestamp(time_stamp)
     year = pic_date.year
