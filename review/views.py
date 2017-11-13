@@ -16,7 +16,7 @@ web_pics = os.path.split(review)[0]
 PIC_ROOT = os.path.join(web_pics, "review", "static", "review", "pics")
 VID_ROOT = os.path.join(web_pics, "review", "static", "review", "videos")
 PIC_EXT = [".jpg", ".png", ".bmp", ".JPG", ".PNG", ".BMP"]
-VID_EXT = [".mp4", ".mov"]
+VID_EXT = [".mp4", ".mov", ".MP4", ".MOV"]
 
 STATUS = {PicFile.KEEP: "Saved",
           PicFile.DELETE: "To Delete",
@@ -37,6 +37,7 @@ def get_picfile(path, name, root):
             filename, ext = os.path.splitext(name)
             if ext in PIC_EXT:
                 pf.filetype = PicFile.IMAGE 
+                pf.thumbnail = "placeholder"
             elif ext in VID_EXT:
                 pf.filetype = PicFile.VIDEO
                 pf.thumbnail = os.path.join("static", "review", "thumbnails",
@@ -109,7 +110,11 @@ def view_dir(request, path):
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
         for form in formset:
+            print("Trying a form")
+            print(form)
             if form.is_valid():
+                print("Valid form")
+                print(form)
                 form.save()
     else:
         formset = PicFormSet(queryset=PicFile.objects.filter(path=path))
