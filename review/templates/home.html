@@ -28,8 +28,8 @@ class="active"
         {% if pic != pics.0 %}
           <div class="item">
         {% endif %}
-        <img src="{{ pic }}" alt="{{ pic }}">
-      </div>
+            <img src="{{ pic }}" alt="{{ pic }}" style="height: 100%;">
+          </div>
       {% endfor %}
     </div>
 
@@ -43,5 +43,24 @@ class="active"
       <span class="sr-only">Next</span>
     </a>
   </div>
+{% endblock %}
+
+{% block style %}
+  html, body{
+    height: 100%;
+    width: 100%;
+  }
+  .container, .row {
+    height: 100%;
+  }
+  .carousel, .item, .active {
+    height: 100%;
+  }
+  .carousel-inner {
+    height: 100%;
+  }
+  .carousel-inner > .item > img{
+  margin:auto;
+  }
 {% endblock %}
 
