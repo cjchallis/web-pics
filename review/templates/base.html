@@ -45,29 +45,24 @@
       </div>
     </nav>
     <div class="container">
-      <div class="row">
-        <div class="col-xs-12"> 
-          <div class="home-text"> 
-            {% block home %}
-            {% endblock %}
-          </div>
-        </div>
-      </div> 
+      {% block home %}
+      {% endblock %}
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
   </body>
 
   <style>
-body {
-  padding-top: 50px;
-}
-.home-text {
-  padding: 40px 15px;
-  text-align: center;
-}
-{% block style %}
-{% endblock %}
+    body {
+      padding-top: 50px;
+    }
+    .home-text {
+      padding: 40px 15px;
+      text-align: center;
+    }
+    {% block style %}
+    {% endblock %}
+
   </style>
 
 </html>
