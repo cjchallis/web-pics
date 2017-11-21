@@ -5,31 +5,33 @@ class="active"
 {% endblock %}
 
 {% block home %}
-        <h1>Files Staged for Deletion</h1>
-        <div class="row">
-            {% for entry in entries %}
-            <div class="col-sm-4 col-md-3 col-lg-2">
-                <a href="/{{ entry }}" class="thumbnail">
-                    <img src="/static/{{ entry }}" alt="{{ entry }}">
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-        <h2><a href="/run_deletion">Delete Files</a></h2>
-        <br>
+  <div class="home-text">
+    <h1>Files Staged for Deletion</h1>
+    <div class="row">
+      {% for entry in entries %}
+      <div class="col-sm-4 col-md-3 col-lg-2">
+        <a href="/{{ entry }}" class="thumbnail">
+          <img src="/static/review/pics/{{ entry }}" alt="{{ entry }}">
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <h2><a href="/run_deletion" class = "btn btn-primary btn-lg">Delete Files</a></h2>
+    <br>
+  </div>
 {% endblock %}
 
 {% block style %}
-.row {
+  .row {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display:         flex;
     flex-wrap: wrap;
-}
-.row > [class*='col-'] {
+  }
+  .row > [class*='col-'] {
     display: flex;
     flex-direction: column;
-}
+  }
 {% endblock %}
 
