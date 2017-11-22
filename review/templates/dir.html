@@ -73,7 +73,10 @@
     {% endfor %}
   </div>
   {% if formset.0 %}
-    <button type="submit" class="btn btn-primary btn-lg"/>Save Changes</button>
+    <button type="submit" class="btn btn-primary btn-lg"
+            style="position: fixed; bottom: 10px; left: 50%;
+            transform: translateX(-50%);"
+    />Save Changes</button>
   {% endif %}
 </form>
 </div>
