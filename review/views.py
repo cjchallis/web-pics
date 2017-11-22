@@ -141,7 +141,10 @@ def home(request):
         npath = os.path.normpath(samp[i])
         l = npath.split(os.sep)
         samp[i] = "/" + "/".join(l[l.index("static"):])
-
+    
+    favorites = PicFile.objects.filter(status='CH')
+    samp = sample(list(favorites), 7)
+    samp = ["/" + "/".join(["static", "review", "pics", pic.path, pic.name]) for pic in samp]
     return render(request, 'home.html', {"pics": samp})
 
 
