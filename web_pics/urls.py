@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^chatbooks$', views.chatbooks, name = 'chatbooks'),
     url(r'(.+)/next$', views.nxt, name = 'next'),
     url(r'(.+)/previous$', views.prev, name = 'prev'), 
+    url(r'(.+)/rotate$', views.rotate, name = 'rotate'),
     url(r'(.+)/(KP|DL|CH)$', views.modify, name = 'modify'),
     url(r'(.+)', views.view_img, name='view_img'),
     # url(r'^admin/', include(admin.site.urls)),

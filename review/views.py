@@ -219,6 +219,14 @@ def prev(request, nodepath):
     return redirect("/{0}/{1}".format(path, nxt))
 
 
+def rotate(request, nodepath):
+    fullpath = "/".join([PIC_ROOT, nodepath])
+    print(fullpath)
+    print("mogrify -rotate 90 {0}".format(fullpath))
+    os.system("mogrify -rotate 90 {0}".format(fullpath))
+    return redirect("/" + nodepath)
+
+
 def modify(request, nodepath, mod):
     path, node = os.path.split(nodepath)
     querySet = PicFile.objects.filter(path=path, name=node)

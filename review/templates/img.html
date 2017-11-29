@@ -18,7 +18,7 @@
       {% for form in formset %}
       <div class="row vertical-align">
         <div class="col-xs-1">
-          <a href="/{{ path }}/prev"class="btn btn-default btn-lg" role="button">
+          <a href="/{{ path }}/prev" class="btn btn-default btn-lg" role="button">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </a>
         </div>
@@ -26,7 +26,7 @@
           <img src="/static/review/pics/{{ path }}" class="img-thumbnail" alt="image">
         </div>
         <div class="col-xs-1">
-          <a href="/{{ path }}/next"class="btn btn-default btn-lg" role="button">
+          <a href="/{{ path }}/next" class="btn btn-default btn-lg" role="button">
             <span class="glyphicon glyphicon-chevron-right"></span>
           </a>
         </div>
@@ -62,6 +62,9 @@
     {% endif %}
   </form>  
   <br>
+  <a href="/{{ path }}/rotate" class="btn btn-primary btn-lg" role="button">
+    Rotate
+  </a>
   {{ month }} {{ day}} {{ year }}
 {% endblock %}
 
