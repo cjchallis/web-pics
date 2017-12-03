@@ -5,7 +5,7 @@ from django.forms import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from copy import copy
-from random import sample
+from random import sample, randint
 import datetime
 import os
 import pandas as pd
@@ -199,7 +199,8 @@ def view_img(request, nodepath):
                                         'formset': formset,
                                         'year': year,
                                         'month': month,
-                                        'day': day
+                                        'day': day,
+                                        'rand': randint(0, 100000000)
                                        })
 
 
@@ -219,12 +220,16 @@ def prev(request, nodepath):
     return redirect("/{0}/{1}".format(path, nxt))
 
 
-def rotate(request, nodepath):
+def rotate_right(request, nodepath):
     fullpath = "/".join([PIC_ROOT, nodepath])
-    print(fullpath)
-    print("mogrify -rotate 90 {0}".format(fullpath))
     os.system("mogrify -rotate 90 '{0}'".format(fullpath))
     return redirect("/" + nodepath)
+
+
+def rotate_left(request, nodepath):
+    fullpath = "/".join([PIC_ROOT, nodepath])
+    os.system("mogrify -rotate 270 '{0}'".format(fullpath))
+    return redirect("/" + nodepath, {"reload": 1})
 
 
 def modify(request, nodepath, mod):
