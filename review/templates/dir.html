@@ -60,7 +60,7 @@
         {% endfor %}
         {% if form.filetype.value == "PIC" %}
           <a href="/{{ form.path.value }}/{{ form.name.value }}" class="thumbnail">
-            <img src="/static/review/pics/{{ form.path.value }}/{{ form.name.value }}" alt="{{ pic }}">
+            <img src="/static/review/thumbnails/{{ form.path.value }}/{{ form.name.value }}" alt="{{ pic }}">
           </a>
         {% endif %}
         {% if form.filetype.value == "VID" %}
