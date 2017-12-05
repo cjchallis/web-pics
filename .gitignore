@@ -5,4 +5,8 @@ __pycache__
 review/migrations
 review/static/pics
 review/static/vids
+*.png
+*.jpg
+*.PNG
+*.JPG
 
