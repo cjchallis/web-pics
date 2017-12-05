@@ -15,6 +15,7 @@ review = os.path.split(cur_path)[0]
 web_pics = os.path.split(review)[0]
 PIC_ROOT = os.path.join(web_pics, "review", "static", "review", "pics")
 VID_ROOT = os.path.join(web_pics, "review", "static", "review", "videos")
+THM_ROOT = os.path.join(web_pics, "review", "static", "review", "thumbnails")
 PIC_EXT = [".jpg", ".png", ".bmp", ".JPG", ".PNG", ".BMP"]
 VID_EXT = [".mp4", ".mov", ".MP4", ".MOV"]
 
@@ -222,13 +223,17 @@ def prev(request, nodepath):
 
 def rotate_right(request, nodepath):
     fullpath = "/".join([PIC_ROOT, nodepath])
+    thmpath = "/".join([THM_ROOT, nodepath])
     os.system("mogrify -rotate 90 '{0}'".format(fullpath))
+    os.system("mogrify -rotate 90 '{0}'".format(thmpath))
     return redirect("/" + nodepath)
 
 
 def rotate_left(request, nodepath):
     fullpath = "/".join([PIC_ROOT, nodepath])
+    thmpath = "/".join([THM_ROOT, nodepath])
     os.system("mogrify -rotate 270 '{0}'".format(fullpath))
+    os.system("mogrify -rotate 270 '{0}'".format(thmpath))
     return redirect("/" + nodepath, {"reload": 1})
 
 
