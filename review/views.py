@@ -163,7 +163,7 @@ def del_list(request):
     return render(request, 'del_list.html', {"entries": entries})
 
 
-def chatbooks(request):
+def favorites(request):
     chat = PicFile.objects.filter(status="CH")
     entries = [os.path.join(f.path, f.name) for f in chat]
     return render(request, 'chatbooks.html', {"entries": entries})

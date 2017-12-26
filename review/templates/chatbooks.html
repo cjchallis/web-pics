@@ -5,12 +5,12 @@ class="active"
 {% endblock %}
 
 {% block home %}
-        <h1>Photos for Chatbooks</h1>
+        <h1>Favorites</h1>
         <div class="row">
             {% for entry in entries %}
             <div class="col-sm-4 col-md-3 col-lg-2">
                 <a href="/{{ entry }}" class="thumbnail">
-                    <img src="/static/{{ entry }}" alt="{{ entry }}">
+                    <img src="/static/review/pics/{{ entry }}" alt="{{ entry }}">
                 </a>
             </div>
             {% endfor %}
