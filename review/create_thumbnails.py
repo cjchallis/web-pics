@@ -8,7 +8,7 @@ thumb_root = os.path.join(cur_path, "static", "review", "thumbnails")
 pic_ext = [".png", ".jpg", ".bmp", ".gif"]
 
 for subdir, dirs, files in os.walk(pic_root):
-    sub = os.path.split(subdir)[1]
+    sub = os.path.relpath(subdir, pic_root)
     for f in files:
         if os.path.splitext(f)[1].lower() in pic_ext:
             thumb = os.path.join(thumb_root, sub, f)
