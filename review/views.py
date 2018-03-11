@@ -103,12 +103,13 @@ def view_dir(request, path):
     reviewed = PicFile.objects.filter(path__icontains=up_path)
     reviewed = reviewed.exclude(status='UN')
 
+    print(path)
     print(up_path)
     print(dirs)
     for d in dirs:
         print(d[:-1])
     counts = [str(count_files(os.path.join(path, dr), PIC_ROOT)) for dr in dirs]
-    rev_cts = [reviewed.filter(path__icontains=up_path+dr[:-1]).count() for dr in dirs]
+    rev_cts = [reviewed.filter(path__icontains=path+"/"+dr[:-1]).count() for dr in dirs]
 
     table = list(zip(ref, rev_cts, counts))
     PicFormSet = modelformset_factory(PicFile, form=PicForm, max_num = 0)
