@@ -105,8 +105,9 @@ def view_dir(request, path):
 
     for d in dirs:
         print(d[:-1])
-    if path == "/":
-        pre = path
+    print(path)
+    if path == "":
+        pre = "" 
     else:
         pre = path + "/"
     counts = [str(count_files(os.path.join(path, dr), PIC_ROOT)) for dr in dirs]
