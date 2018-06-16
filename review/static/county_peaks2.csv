@@ -1,39 +1,39 @@
-County,Peak,Elevation,Hiked,Highest,Lat,Long,Dir
-Duchesne County,Kings Peak,13528,0,1,40.7764,-110.3728,none
-Summit County,Gilbert Peak,13442,0,1,40.823479,-110.377871772,none
-San Juan County,Mount Peale,12721,0,1,38.4383,-109.2293,none
-Grand County,Mount Waas,12331,0,1,38.5392,-109.2276,none
-Daggett County,Eccentric Peak,12276,0,1,40.809602,-109.974154,none
-Uintah County,Eccentric Peak,12276,0,1,40.809602,-109.974154,none
-Beaver County,Delano Peak,12169,0,1,38.3691,-112.3713,none
-Piute County,Delano Peak,12169,0,1,38.3691,-112.3713,none
-Juab County,Ibapah Peak,12087,0,1,39.8283,-113.9197,none
-Utah County,Mount Nebo,11928,0,1,39.8216,-111.7599,none
-Sevier County,Fish Lake Hightop,11633,0,1,38.6135856,-111.7321339,none
-Garfield County,Mount Ellen,11522,0,1,38.1097,-110.8138,none
-Salt Lake County,American Fork Twin Peaks,11489,1,1,40.5519,-111.6566,twinpeaks
-Wayne County,Bluebell Knoll,11328,0,1,38.1597,-111.4999,none
-Iron County,Brian Head,11307,0,1,37.6928,-112.8508,none
-Sanpete County,South Tent Mountain,11285,0,1,39.3922,-111.3574,none
-Tooele County,Deseret Peak,11031,0,1,40.4597,-112.6263,none
-Wasatch County,Mount Cardwell,10743,0,1,40.6624,-110.9107,none
-Emery County,East Mountain,10743,0,1,39.4755,-111.2168,none
-Carbon County,Monument Peak,10452,0,1,39.6143,-111.1753,none
-Washington County,Signal Peak,10365,0,1,37.3197,-113.4916,none
-Millard County,Mine Camp Peak,10222,0,1,38.8741,-112.2535,none
-Kane County,Andrew Nelson Peak,10027,0,1,37.5175,-112.8177,none
-Cache County,Naomi Peak,9979,1,1,41.9113,-111.6752,naomi
-Box Elder County,Bull Mountain,9934,0,1,41.9117,-113.3654,boxelder
-Weber County,Willard Peak,9763,0,1,41.383,-111.9741,none
-Davis County,Thurston Peak,9706,0,1,41.0819,-111.8516,none
-Morgan County,Thurston Peak,9706,0,1,41.0819,-111.8516,none
-Rich County,Bridger Peak,9255,0,1,41.9991,-111.4769,none
-Utah County,Mount Timpanogos,11752,1,0,40.3908,-111.6458,timp
-Utah County,Box Elder Peak,11101,1,0,40.4902,-111.6963,none
-Utah County,Lone Peak,11253,0,0,40.5266,-111.756,none
-Utah County,Cascade Mountain,10908,0,0,40.3072,-111.5888,none
-Utah County,Santaquin Peak,10685,0,0,39.9833,-111.6241,none
-Utah County,Spanish Fork Peak,10192,0,0,40.0883,-111.5277,none
-Utah County,Provo Peak,11068,0,0,40.2444,-111.5566,none
-Utah County,Pfeifferhorn,11325,0,0,40.5336,-111.706,none
-Iron County,Valentine Peak,8045,0,0,37.8264,-112.788,none
+County,Peak,Elevation,Hiked,Highest,Lat,Long,Dir,Date
+Duchesne County,Kings Peak,13528,0,1,40.7764,-110.3728,none,none
+Summit County,Gilbert Peak,13442,0,1,40.823479,-110.377871772,none,none
+San Juan County,Mount Peale,12721,0,1,38.4383,-109.2293,none,none
+Grand County,Mount Waas,12331,0,1,38.5392,-109.2276,none,none
+Daggett County,Eccentric Peak,12276,0,1,40.809602,-109.974154,none,none
+Uintah County,Eccentric Peak,12276,0,1,40.809602,-109.974154,none,none
+Beaver County,Delano Peak,12169,1,1,38.3691,-112.3713,delano,"June 13, 2018"
+Piute County,Delano Peak,12169,1,1,38.3691,-112.3713,none,none
+Juab County,Ibapah Peak,12087,0,1,39.8283,-113.9197,none,none
+Utah County,Mount Nebo,11928,0,1,39.8216,-111.7599,none,none
+Sevier County,Fish Lake Hightop,11633,0,1,38.6135856,-111.7321339,none,none
+Garfield County,Mount Ellen,11522,0,1,38.1097,-110.8138,none,none
+Salt Lake County,American Fork Twin Peaks,11489,1,1,40.5519,-111.6566,twinpeaks,"September 20, 2017"
+Wayne County,Bluebell Knoll,11328,0,1,38.1597,-111.4999,none,none
+Iron County,Brian Head,11307,1,1,37.6928,-112.8508,brianhead,"October 22, 2017"
+Sanpete County,South Tent Mountain,11285,0,1,39.3922,-111.3574,none,none
+Tooele County,Deseret Peak,11031,0,1,40.4597,-112.6263,none,none
+Wasatch County,Mount Cardwell,10743,0,1,40.6624,-110.9107,none,none
+Emery County,East Mountain,10743,0,1,39.4755,-111.2168,none,none
+Carbon County,Monument Peak,10452,0,1,39.6143,-111.1753,none,none
+Washington County,Signal Peak,10365,0,1,37.3197,-113.4916,none,none
+Millard County,Mine Camp Peak,10222,0,1,38.8741,-112.2535,none,none
+Kane County,Andrew Nelson Peak,10027,1,1,37.5175,-112.8177,andrewnelson,"October 23, 2017"
+Cache County,Naomi Peak,9979,1,1,41.9113,-111.6752,naomi,"July 29, 2017"
+Box Elder County,Bull Mountain,9934,0,1,41.9117,-113.3654,none,none
+Weber County,Willard Peak,9763,0,1,41.383,-111.9741,none,none
+Davis County,Thurston Peak,9706,0,1,41.0819,-111.8516,none,none
+Morgan County,Thurston Peak,9706,0,1,41.0819,-111.8516,none,none
+Rich County,Bridger Peak,9255,0,1,41.9991,-111.4769,none,none
+Utah County,Mount Timpanogos,11752,1,0,40.3908,-111.6458,timp,"August 19, 2017"
+Utah County,Box Elder Peak,11101,1,0,40.4902,-111.6963,boxelder,"July 22, 2017"
+Utah County,Lone Peak,11253,0,0,40.5266,-111.756,none,none
+Utah County,Cascade Mountain,10908,0,0,40.3072,-111.5888,none,none
+Utah County,Santaquin Peak,10685,0,0,39.9833,-111.6241,none,none
+Utah County,Spanish Fork Peak,10192,0,0,40.0883,-111.5277,none,none
+Utah County,Provo Peak,11068,0,0,40.2444,-111.5566,none,none
+Utah County,Pfeifferhorn,11325,0,0,40.5336,-111.706,none,none
+Iron County,Valentine Peak,8045,1,0,37.8264,-112.788,valentine,"October 21, 2017"
