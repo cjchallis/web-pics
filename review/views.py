@@ -93,23 +93,17 @@ def view_dir(request, path):
     # initializes PicFile for new images
     for p in pics:
         get_picfile(path, p, PIC_ROOT)
+    # create paths
     top_path = make_top_path(os.path.join("pics", path))
     up = "/{0}/".format(os.path.split(path)[0])
-    if up == "//":
-        up = up_path = "/"
-    else:
-        up_path = up[1:]
+    up_path = "/" if up == "//" else up[1:]
     ref = copy(dirs)
+
+    # get counts of reviewed pictures
     reviewed = PicFile.objects.filter(path__icontains=up_path)
     reviewed = reviewed.exclude(status='UN')
 
-    for d in dirs:
-        print(d[:-1])
-    print(path)
-    if path == "":
-        pre = "" 
-    else:
-        pre = path + "/"
+    pre = "" if path == "" else path + "/"
     counts = [str(count_files(os.path.join(path, dr), PIC_ROOT)) for dr in dirs]
     rev_cts = [reviewed.filter(path__icontains=pre+dr[:-1]).count() for dr in dirs]
 
@@ -118,11 +112,7 @@ def view_dir(request, path):
     if request.method == 'POST':
         formset = PicFormSet(request.POST, request.FILES)
         for form in formset:
-            print("Trying a form")
-            print(form)
             if form.is_valid():
-                print("Valid form")
-                print(form)
                 form.save()
     else:
         formset = PicFormSet(queryset=PicFile.objects.filter(path=path))
@@ -150,9 +140,12 @@ def home(request):
         l = npath.split(os.sep)
         samp[i] = "/" + "/".join(l[l.index("static"):])
     
-    favorites = PicFile.objects.filter(status='CH')
-    samp = sample(list(favorites), 7)
-    samp = ["/" + "/".join(["static", "review", "pics", pic.path, pic.name]) for pic in samp]
+    try: 
+        favorites = PicFile.objects.filter(status='CH')
+        samp = sample(list(favorites), 7)
+        samp = ["/" + "/".join(["static", "review", "pics", pic.path, pic.name]) for pic in samp]
+    except:
+        samp = []
     return render(request, 'home.html', {"pics": samp})
 
 
