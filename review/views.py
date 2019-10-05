@@ -104,7 +104,7 @@ def view_dir(request, path):
     reviewed = reviewed.exclude(status='UN')
 
     pre = "" if path == "" else path + "/"
-    counts = [str(count_files(os.path.join(path, dr), PIC_ROOT)) for dr in dirs]
+    counts = [str(count_files(os.path.join(path, dr), THM_ROOT)) for dr in dirs]
     rev_cts = [reviewed.filter(path__icontains=pre+dr[:-1]).count() for dr in dirs]
 
     table = list(zip(ref, rev_cts, counts))
